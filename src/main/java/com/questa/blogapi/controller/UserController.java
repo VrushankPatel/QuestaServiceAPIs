@@ -19,6 +19,11 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
+	@GetMapping("/")
+	private String showWelcomeMsg() {
+		return "Welcome to Questa Back-end APIs....";
+	}
+	
 	@GetMapping("/user")
 	private List<User> getAllUser() {
 		return userService.getAllUser();
