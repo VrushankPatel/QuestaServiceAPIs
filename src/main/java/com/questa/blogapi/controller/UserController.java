@@ -1,47 +1,33 @@
 package com.questa.blogapi.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.questa.blogapi.model.AuthenticationRequest;
+import com.questa.blogapi.model.AuthenticationResponse;
 import com.questa.blogapi.model.User;
 import com.questa.blogapi.service.UserService;
 
 @RestController
 public class UserController {
-
 	@Autowired
-	UserService userService;
+	private UserService userDetailsService;
 
-	@GetMapping("/")
-	private String showWelcomeMsg() {
-		return "Welcome to Questa Back-end APIs....";
-	}
-	
-	@GetMapping("/user")
-	private List<User> getAllUser() {
-		return userService.getAllUser();
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	private ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+			throws Exception {
+		AuthenticationResponse authenticationResponse = userDetailsService.createAuthenticationToken(authenticationRequest);
+		return ResponseEntity.ok(authenticationResponse);
 	}
 
-	@GetMapping("/user/{id}")
-	private User getUser(@PathVariable("id") int id) {
-		return userService.getUserById(id);
+	@RequestMapping(value = "/signup", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<String> createUser(@RequestBody User user) {
+		return userDetailsService.createUser(user);
+
 	}
 
-	@DeleteMapping("/student/{id}")
-	private void deleteStudent(@PathVariable("id") int id) {
-		userService.delete(id);
-	}
-
-	@PostMapping("/student")
-	private int saveStudent(@RequestBody User student) {
-		userService.saveOrUpdate(student);
-		return student.getId();
-	}
 }
