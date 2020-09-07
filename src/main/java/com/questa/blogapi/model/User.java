@@ -2,7 +2,6 @@ package com.questa.blogapi.model;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +34,7 @@ public class User implements Serializable{
 	@Column(name="LAST_NAME")
 	private String lastName;
 	
-	@Column(name="EMAIL")
+	@Column(name="EMAIL", nullable = false, unique = true)
 	private String email;
 	
 	@Column(name="PASSWORD")
