@@ -52,7 +52,7 @@ public class User implements Serializable{
 	private Integer grade;
 
 	@Column(name="COUNTRY")
-	private Long country;
+	private String country;
 
 	@Column(name="SCHOOL")
 	private String school;
@@ -113,11 +113,11 @@ public class User implements Serializable{
 		this.grade = grade;
 	}
 
-	public Long getCountry() {
+	public String getCountry() {
 		return country;
 	}
 
-	public void setCountry(Long country) {
+	public void setCountry(String country) {
 		this.country = country;
 	}
 
