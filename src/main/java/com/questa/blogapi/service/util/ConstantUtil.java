@@ -2,6 +2,7 @@ package com.questa.blogapi.service.util;
 
 public class ConstantUtil {
 
+	public static final Integer SUCCESS_CODE = 200;
 	public static final Integer EMAIL_ERROR_CODE = 531;
 	public static final String EMAIL_ERROR_MESSAGE = "Email already exist in Database";
 	
@@ -12,5 +13,6 @@ public class ConstantUtil {
 	public static final String USER_NOFOUNT_ERROR_MESSAGE = "Username not found";
 	
 	public static final String USER_CREATED_MESSAGE = "User successfully created...";
+	
 	
 }

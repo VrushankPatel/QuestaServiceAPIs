@@ -26,7 +26,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<String> createUser(@RequestBody User user) throws QuestaException {
+	public ResponseEntity<Object> createUser(@RequestBody User user) throws QuestaException {
 		return userDetailsService.createUser(user);
 
 	}

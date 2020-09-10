@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.AuthenticationRequest;
 import com.questa.blogapi.model.AuthenticationResponse;
+import com.questa.blogapi.model.QuestaResponse;
 import com.questa.blogapi.model.User;
 import com.questa.blogapi.repository.UserRepository;
 import com.questa.blogapi.service.util.ConstantUtil;
@@ -76,15 +77,15 @@ public class UserService implements UserDetailsService {
 		}
 
 		final UserDetails userDetails = loadUserByUsername(authenticationRequest.getUsername());
-		return new AuthenticationResponse(jwtUtil.generateToken(userDetails));
+		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true);
 	}
 
-	public ResponseEntity<String> createUser(@RequestBody User user) throws QuestaException {
+	public ResponseEntity<Object> createUser(@RequestBody User user) throws QuestaException {
 		Optional<User> userExist = userRepository.findByEmail(user.getEmail());
 		if (userExist.isPresent()) throw new QuestaException(ConstantUtil.EMAIL_ERROR_MESSAGE,ConstantUtil.EMAIL_ERROR_CODE);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
-		return new ResponseEntity<>(ConstantUtil.USER_CREATED_MESSAGE, HttpStatus.OK);
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 
 	public String extractUsername(String token) {

@@ -1,21 +1,21 @@
 package com.questa.blogapi.model;
 
-public class AuthenticationResponse {
-
-	private final String token;
+public class QuestaResponse {
+	private final String message;
 	private final Integer code;
 	private final Boolean status;
 	
-	public AuthenticationResponse(String token, Integer code,Boolean status) {
-		this.token = token;
+	public QuestaResponse(String message, Integer code, Boolean status) {
+		super();
+		this.message = message;
 		this.code = code;
 		this.status = status;
 	}
 
-	public String getToken() {
-		return token;
+	public String getMessage() {
+		return message;
 	}
-
+	
 	public Integer getCode() {
 		return code;
 	}
@@ -24,6 +24,4 @@ public class AuthenticationResponse {
 		return status;
 	}
 
-	
-	
 }
