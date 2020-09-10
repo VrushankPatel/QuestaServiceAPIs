@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.questa.blogapi.exception.EmailAlreadyExistException;
+import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.AuthenticationRequest;
 import com.questa.blogapi.model.AuthenticationResponse;
 import com.questa.blogapi.model.User;
@@ -20,13 +20,13 @@ public class UserController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	private ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
-			throws Exception {
+			throws QuestaException {
 		AuthenticationResponse authenticationResponse = userDetailsService.createAuthenticationToken(authenticationRequest);
 		return ResponseEntity.ok(authenticationResponse);
 	}
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<String> createUser(@RequestBody User user) throws EmailAlreadyExistException {
+	public ResponseEntity<String> createUser(@RequestBody User user) throws QuestaException {
 		return userDetailsService.createUser(user);
 
 	}

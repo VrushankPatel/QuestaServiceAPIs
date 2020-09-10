@@ -13,21 +13,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.questa.blogapi.exception.EmailAlreadyExistException;
+import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.AuthenticationRequest;
 import com.questa.blogapi.model.AuthenticationResponse;
 import com.questa.blogapi.model.User;
 import com.questa.blogapi.repository.UserRepository;
+import com.questa.blogapi.service.util.ConstantUtil;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -51,7 +52,7 @@ public class UserService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
 
-		user.orElseThrow(() -> new UsernameNotFoundException("Not Found: " + email));
+		user.orElseThrow(() -> new QuestaException(ConstantUtil.USER_NOFOUNT_ERROR_MESSAGE,ConstantUtil.USER_NOFOUNT_ERROR_CODE));
 
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(user.get().getRole().toString()));
@@ -66,21 +67,21 @@ public class UserService implements UserDetailsService {
 	}
 
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
-			throws Exception {
+			throws QuestaException {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-		} catch (BadCredentialsException e) {
-			throw new Exception("Incorrect username or password", e);
+		} catch (BadCredentialsException | InternalAuthenticationServiceException e) {
+			throw new QuestaException(ConstantUtil.INCORRECT_LOGIN_ERROR_MESSAGE,ConstantUtil.INCORRECT_LOGIN_ERROR_CODE);
 		}
 
 		final UserDetails userDetails = loadUserByUsername(authenticationRequest.getUsername());
 		return new AuthenticationResponse(jwtUtil.generateToken(userDetails));
 	}
 
-	public ResponseEntity<String> createUser(@RequestBody User user) throws EmailAlreadyExistException {
+	public ResponseEntity<String> createUser(@RequestBody User user) throws QuestaException {
 		Optional<User> userExist = userRepository.findByEmail(user.getEmail());
-		if (userExist.isPresent()) throw new EmailAlreadyExistException();
+		if (userExist.isPresent()) throw new QuestaException(ConstantUtil.EMAIL_ERROR_MESSAGE,ConstantUtil.EMAIL_ERROR_CODE);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 		return new ResponseEntity<>("User successfully created...", HttpStatus.OK);
