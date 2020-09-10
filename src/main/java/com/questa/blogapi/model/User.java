@@ -45,7 +45,7 @@ public class User implements Serializable{
 	private Role role;
 
 	@Column(name="BIRTH_DATE")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date birthdate;
 
 	@Column(name="GRADE")
