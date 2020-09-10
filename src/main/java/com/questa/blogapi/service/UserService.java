@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService {
 		if (userExist.isPresent()) throw new QuestaException(ConstantUtil.EMAIL_ERROR_MESSAGE,ConstantUtil.EMAIL_ERROR_CODE);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
-		return new ResponseEntity<>("User successfully created...", HttpStatus.OK);
+		return new ResponseEntity<>(ConstantUtil.USER_CREATED_MESSAGE, HttpStatus.OK);
 	}
 
 	public String extractUsername(String token) {

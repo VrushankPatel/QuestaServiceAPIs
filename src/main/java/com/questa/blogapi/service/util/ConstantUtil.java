@@ -11,4 +11,6 @@ public class ConstantUtil {
 	public static final Integer USER_NOFOUNT_ERROR_CODE = 533;
 	public static final String USER_NOFOUNT_ERROR_MESSAGE = "Username not found";
 	
+	public static final String USER_CREATED_MESSAGE = "User successfully created...";
+	
 }
