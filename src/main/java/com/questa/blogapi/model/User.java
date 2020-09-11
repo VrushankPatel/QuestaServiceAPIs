@@ -26,18 +26,18 @@ public class User implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
 	@SequenceGenerator(name="users_seq", sequenceName = "users_seq")
 	@Column(name = "id", updatable = false, nullable = false)
-	private Long id;
+	private Integer id;
 	
-	@Column(name="FIRST_NAME")
+	@Column(name="FIRST_NAME", nullable = false)
 	private String firstName;
 	
-	@Column(name="LAST_NAME")
+	@Column(name="LAST_NAME", nullable = false)
 	private String lastName;
 	
 	@Column(name="EMAIL", nullable = false, unique = true)
 	private String email;
 	
-	@Column(name="PASSWORD")
+	@Column(name="PASSWORD", nullable = false)
 	private String password;
 	
 	@Column(name="ROLE") 
@@ -127,6 +127,14 @@ public class User implements Serializable{
 
 	public void setSchool(String school) {
 		this.school = school;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	@Override

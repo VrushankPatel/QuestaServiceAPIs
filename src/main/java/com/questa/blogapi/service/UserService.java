@@ -21,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.AuthenticationRequest;
@@ -67,7 +66,7 @@ public class UserService implements UserDetailsService {
 				authorities);
 	}
 
-	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+	public AuthenticationResponse createAuthenticationToken(AuthenticationRequest authenticationRequest)
 			throws QuestaException {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -76,16 +75,24 @@ public class UserService implements UserDetailsService {
 			throw new QuestaException(ConstantUtil.INCORRECT_LOGIN_ERROR_MESSAGE,ConstantUtil.INCORRECT_LOGIN_ERROR_CODE);
 		}
 
-		final UserDetails userDetails = loadUserByUsername(authenticationRequest.getUsername());
-		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true);
+		UserDetails userDetails = loadUserByUsername(authenticationRequest.getUsername());
+		Optional<User> user = userRepository.findByEmail(authenticationRequest.getUsername());
+		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true,user.get().getId());
 	}
 
-	public ResponseEntity<Object> createUser(@RequestBody User user) throws QuestaException {
+	public ResponseEntity<Object> createUser(User user) throws QuestaException {
+		System.out.println(user.toString());
 		Optional<User> userExist = userRepository.findByEmail(user.getEmail());
 		if (userExist.isPresent()) throw new QuestaException(ConstantUtil.EMAIL_ERROR_MESSAGE,ConstantUtil.EMAIL_ERROR_CODE);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+	}
+	
+	public ResponseEntity<Object> getUserdetails(Integer userId) throws QuestaException {
+		System.out.println("Fetching record for userid["+userId+"]");
+		Optional<User> userExist = userRepository.findById(userId);
+		return new ResponseEntity<>(userExist.get(), HttpStatus.OK);
 	}
 
 	public String extractUsername(String token) {
