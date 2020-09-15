@@ -28,7 +28,7 @@ import com.questa.blogapi.model.AuthenticationResponse;
 import com.questa.blogapi.model.QuestaResponse;
 import com.questa.blogapi.model.User;
 import com.questa.blogapi.repository.UserRepository;
-import com.questa.blogapi.service.util.ConstantUtil;
+import com.questa.blogapi.util.ConstantUtil;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -43,8 +43,13 @@ public class UserService implements UserDetailsService {
 	private JwtUtil jwtUtil = new JwtUtil();
 
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
+
+	@Autowired
+	private QuestionService questionService;
+	
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -56,12 +61,6 @@ public class UserService implements UserDetailsService {
 
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(user.get().getRole().toString()));
-		/*
-		 * Use the following constructor if the locking and enabling need to be handled
-		 * (String username, String password, boolean enabled, boolean
-		 * accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked,
-		 * Collection<? extends GrantedAuthority> authorities)
-		 */
 		return new org.springframework.security.core.userdetails.User(user.get().getEmail(), user.get().getPassword(),
 				authorities);
 	}
@@ -77,7 +76,7 @@ public class UserService implements UserDetailsService {
 
 		UserDetails userDetails = loadUserByUsername(authenticationRequest.getUsername());
 		Optional<User> user = userRepository.findByEmail(authenticationRequest.getUsername());
-		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true,user.get().getId());
+		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true,user.get().getUserId());
 	}
 
 	public ResponseEntity<Object> createUser(User user) throws QuestaException {
@@ -91,8 +90,15 @@ public class UserService implements UserDetailsService {
 	
 	public ResponseEntity<Object> getUserdetails(Integer userId) throws QuestaException {
 		System.out.println("Fetching record for userid["+userId+"]");
-		Optional<User> userExist = userRepository.findById(userId);
-		return new ResponseEntity<>(userExist.get(), HttpStatus.OK);
+		Optional<User> user = userRepository.findById(userId);
+		return new ResponseEntity<>(user.get(), HttpStatus.OK);
+	}
+	
+	public ResponseEntity<Object> getFullUserdetails(Integer userId) throws QuestaException {
+		System.out.println("Fetching record for userid["+userId+"]");
+		User user = userRepository.findById(userId).get();
+		user.setQuestionList(questionService.getQuestionListByUserId(userId));
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	public String extractUsername(String token) {

@@ -13,13 +13,14 @@ import com.questa.blogapi.model.AuthenticationRequest;
 import com.questa.blogapi.model.AuthenticationResponse;
 import com.questa.blogapi.model.User;
 import com.questa.blogapi.service.UserService;
+import com.questa.blogapi.util.ConstantUtil;
 
 @RestController
 public class UserController {
 	@Autowired
 	private UserService userDetailsService;
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = ConstantUtil.LOGIN_ENDPOINT , method = RequestMethod.POST)
 	private ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws QuestaException {
 		System.out.println(authenticationRequest.toString());
@@ -28,16 +29,21 @@ public class UserController {
 		return ResponseEntity.ok(authenticationResponse);
 	}
 
-	@RequestMapping(value = "/signup", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = ConstantUtil.SIGNUP_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> createUser(@RequestBody User user) throws QuestaException {
 		return userDetailsService.createUser(user);
 
 	}
 	
-	@RequestMapping(value = "/getuser/{userId}", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = ConstantUtil.GETUSER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> getUserdetails(@PathVariable Integer userId) throws QuestaException {
 		return userDetailsService.getUserdetails(userId);
 
 	}
 
+	@RequestMapping(value = ConstantUtil.GETFULLUSER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public ResponseEntity<Object> getFullUserdetails(@PathVariable Integer userId) throws QuestaException {
+		return userDetailsService.getFullUserdetails(userId);
+
+	}
 }

@@ -2,6 +2,7 @@ package com.questa.blogapi.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonFormat; 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude; 
 
 @Entity
 @Table(name = "USERS")
@@ -25,8 +28,8 @@ public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
 	@SequenceGenerator(name="users_seq", sequenceName = "users_seq")
-	@Column(name = "id", updatable = false, nullable = false)
-	private Integer id;
+	@Column(name = "USER_ID", updatable = false, nullable = false)
+	private Integer userId;
 	
 	@Column(name="FIRST_NAME", nullable = false)
 	private String firstName;
@@ -40,11 +43,11 @@ public class User implements Serializable{
 	@Column(name="PASSWORD", nullable = false)
 	private String password;
 	
-	@Column(name="ROLE") 
+	@Column(name="ROLE", nullable = false) 
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@Column(name="BIRTH_DATE")
+	@Column(name="BIRTH_DATE", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date birthdate;
 
@@ -57,6 +60,10 @@ public class User implements Serializable{
 	@Column(name="SCHOOL")
 	private String school;
 
+	@JsonInclude()
+	@Transient
+	private List<Question> questionList;
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -129,17 +136,25 @@ public class User implements Serializable{
 		this.school = school;
 	}
 	
-	public Integer getId() {
-		return id;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public List<Question> getQuestionList() {
+		return questionList;
+	}
+
+	public void setQuestionList(List<Question> questionList) {
+		this.questionList = questionList;
 	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password + ", role=" + role + ", birthdate=" + birthdate + ", grade=" + grade
 				+ ", country=" + country + ", school=" + school + "]";
 	}

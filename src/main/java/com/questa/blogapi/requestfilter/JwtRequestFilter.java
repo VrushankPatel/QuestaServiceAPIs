@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.questa.blogapi.service.UserService;
+import com.questa.blogapi.util.ConstantUtil;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -28,7 +29,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		System.out.println(request.getRequestURI());
-		if (!request.getRequestURI().equalsIgnoreCase("/signup") && !request.getRequestURI().equalsIgnoreCase("/login")) {
+		if ( !ConstantUtil.AUTH_IGNORE_ENDPOINT.contains(request.getRequestURI())) {
+				//!request.getRequestURI().equalsIgnoreCase("/signup") && !request.getRequestURI().equalsIgnoreCase("/login")) {
 			final String authorizationHeader = request.getHeader("Authorization");
 			String username = null;
 			String token = null;
