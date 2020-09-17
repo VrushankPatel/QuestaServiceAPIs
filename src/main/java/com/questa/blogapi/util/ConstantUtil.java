@@ -31,6 +31,10 @@ public class ConstantUtil {
 	public static final Integer INCORRECT_LOGIN_ERROR_CODE = 532;
 	public static final String INCORRECT_LOGIN_ERROR_MESSAGE = "Incorrect username or password";
 	
+	public static final Integer AUTH_FAILED_ERROR_CODE = 555;
+	public static final String AUTH_FAILED_ERROR_MESSAGE = "Authentication failed";
+	
+	
 	public static final Integer USER_NOFOUNT_ERROR_CODE = 533;
 	public static final String USER_NOFOUNT_ERROR_MESSAGE = "Username not found";
 	

@@ -1,6 +1,7 @@
 package com.questa.blogapi.requestfilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,10 +36,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			String username = null;
 			String token = null;
 			if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				return;
+				configResponse(response);
 			}else {
 			//if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+				try {
 				token = authorizationHeader.substring(7);
 				username = userDetailsService.extractUsername(token);
 				if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -50,11 +51,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 						SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 					}
 				}
+				}catch (Exception e) {
+					configResponse(response);
+				}
 			}
 			
 		}
 		filterChain.doFilter(request, response);
 
+	}
+	
+	private void configResponse(HttpServletResponse response) throws IOException {
+		String content = "{\"message\": \""+ConstantUtil.AUTH_FAILED_ERROR_MESSAGE+"\",\"code\": "+ConstantUtil.AUTH_FAILED_ERROR_CODE+"}";
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		PrintWriter out = response.getWriter();
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		out.print(content);
+		out.flush();
 	}
 
 }
