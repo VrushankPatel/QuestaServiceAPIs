@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,34 +39,36 @@ public class QuestionService {
 	@Autowired
 	UserFeedbackRepository userFeedbackRepository;
 	
+	
+	private static final Logger log = LoggerFactory.getLogger(QuestionService.class);
+
 	public ResponseEntity<Object> createQuestion(Question question) throws QuestaException {
-		System.out.println(question.toString());
+		log.info(question.toString());
 		questionRepository.save(question);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.QUESTION_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> createAnswer(Answer answer) throws QuestaException {
-		System.out.println(answer.toString());
+		log.info(answer.toString());
 		answerRepository.save(answer);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> createFollower(Follower follower) throws QuestaException {
-		System.out.println(follower.toString());
+		log.info(follower.toString());
 		followerRepository.save(follower);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
 
 	public ResponseEntity<Object> createUserFeedback(UserFeedback userFeedback) {
-		System.out.println(userFeedback.toString());
+		log.info(userFeedback.toString());
 		userFeedbackRepository.save(userFeedback);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
 	public List<Question> getQuestionListByUserId(Integer userId) throws QuestaException {
 		Iterable<Question> questionIterable = questionRepository.findByUserId(userId);
-		System.out.println(questionIterable);
 		List<Question> questionList = StreamSupport.stream(questionIterable.spliterator(), false)
 				    .collect(Collectors.toList());
 		questionList.stream().forEach(que -> que.setAnswerList(getAnswerListByQuestionId(que.getQuestionId())));
@@ -74,7 +78,6 @@ public class QuestionService {
 	
 	private List<Answer> getAnswerListByQuestionId(Integer questionId) throws QuestaException {
 		Iterable<Answer> answerIterable = answerRepository.findByQuestionId(questionId);
-		System.out.println(answerIterable);
 		List<Answer> answerList = StreamSupport.stream(answerIterable.spliterator(), false)
 				    .collect(Collectors.toList());
 		answerList.stream().forEach(ans -> ans.setUserFeedbackList(getUserFeedbackListByAnswerId(ans.getAnswerId())));
@@ -83,7 +86,6 @@ public class QuestionService {
 	
 	private List<Follower> getFollowerListByQuestionId(Integer questionId) throws QuestaException {
 		Iterable<Follower> followerIterable = followerRepository.findByQuestionId(questionId);
-		System.out.println(followerIterable);
 		List<Follower> followerList = StreamSupport.stream(followerIterable.spliterator(), false)
 				    .collect(Collectors.toList());
 		return followerList;
@@ -91,7 +93,6 @@ public class QuestionService {
 	
 	private List<UserFeedback> getUserFeedbackListByAnswerId(Integer answerId) throws QuestaException {
 		Iterable<UserFeedback> followerIterable = userFeedbackRepository.findByAnswerId(answerId);
-		System.out.println(followerIterable);
 		List<UserFeedback> followerList = StreamSupport.stream(followerIterable.spliterator(), false)
 				    .collect(Collectors.toList());
 		return followerList;
@@ -108,7 +109,6 @@ public class QuestionService {
 
 	public List<Question> findAllByFollower(Integer userId) {
 		Iterable<Follower> followerIterable = followerRepository.findByUserId(userId);
-		System.out.println(followerIterable);
 		List<Follower> followerList = StreamSupport.stream(followerIterable.spliterator(), false)
 				    .collect(Collectors.toList());
 		List<Question> questionList = new ArrayList<>();
@@ -118,7 +118,6 @@ public class QuestionService {
 
 	public List<Question> findAllByAnswer(Integer userId) {
 		Iterable<Answer> answerIterable = answerRepository.findByUserId(userId);
-		System.out.println(answerIterable + "  " + userId);
 		List<Answer> answerList = StreamSupport.stream(answerIterable.spliterator(), false)
 				    .collect(Collectors.toList());
 		List<Question> questionList = new ArrayList<>();

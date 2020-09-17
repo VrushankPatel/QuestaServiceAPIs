@@ -2,6 +2,8 @@ package com.questa.blogapi.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,39 +27,50 @@ public class QuestionController {
 	@Autowired
 	private QuestionService questionService;
 
+	
+	private static final Logger log = LoggerFactory.getLogger(QuestionController.class);
+
 	@RequestMapping(value = ConstantUtil.CREATE_QUESTION_ENDPOINT, method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<Object> createQuestion(@RequestBody Question question) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.CREATE_QUESTION_ENDPOINT +" endpoint");
 		return questionService.createQuestion(question);
 	}
 	
 	@RequestMapping(value = ConstantUtil.CREATE_ANSWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> createAnswer(@RequestBody Answer answer) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.CREATE_ANSWER_ENDPOINT +" endpoint");
+		
 		return questionService.createAnswer(answer);
 	}
 	
 	@RequestMapping(value = ConstantUtil.CREATE_FOLLWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> createFollower(@RequestBody Follower follower) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.CREATE_FOLLWER_ENDPOINT +" endpoint");
 		return questionService.createFollower(follower);
 	}
 	
 	@RequestMapping(value = ConstantUtil.CREATE_FEEDBACK_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> createUserFeedback(@RequestBody UserFeedback userFeedback) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.CREATE_FEEDBACK_ENDPOINT +" endpoint");
 		return questionService.createUserFeedback(userFeedback);
 	}
 	
 	@RequestMapping(value = ConstantUtil.FIND_ALL_QUESTIONS_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public List<Question> findAllQuestions() throws QuestaException {
+		log.info("Calling "+ ConstantUtil.FIND_ALL_QUESTIONS_ENDPOINT +" endpoint");
 		return questionService.findAllQuestions(null);
 	}
 	
 	@RequestMapping(value = ConstantUtil.FIND_ALL_BY_FOLLOWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public List<Question> findAllByFollower(@PathVariable Integer userId) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.FIND_ALL_BY_FOLLOWER_ENDPOINT +" endpoint");
 		return questionService.findAllByFollower(userId);
 	}
 	
 	@RequestMapping(value = ConstantUtil.FIND_ALL_BY_ANSWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	@ResponseBody
 	public List<Question> findAllByAnswer(@PathVariable Integer userId) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.FIND_ALL_BY_ANSWER_ENDPOINT +" endpoint");
 		return questionService.findAllByAnswer(userId);
 	}
 }

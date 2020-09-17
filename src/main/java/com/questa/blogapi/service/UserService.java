@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +55,9 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+	
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
+
 	@Override
 	public UserDetails loadUserByUsername(String email) {
 		Optional<User> user = userRepository.findByEmail(email);
@@ -80,22 +85,22 @@ public class UserService implements UserDetailsService {
 	}
 
 	public ResponseEntity<Object> createUser(User user) throws QuestaException {
-		System.out.println(user.toString());
 		Optional<User> userExist = userRepository.findByEmail(user.getEmail());
 		if (userExist.isPresent()) throw new QuestaException(ConstantUtil.EMAIL_ERROR_MESSAGE,ConstantUtil.EMAIL_ERROR_CODE);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
+		log.info("User created ["+user.toString()+"]");
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> getUserdetails(Integer userId) throws QuestaException {
-		System.out.println("Fetching record for userid["+userId+"]");
+		log.info("Fetching record for userid["+userId+"]");
 		Optional<User> user = userRepository.findById(userId);
 		return new ResponseEntity<>(user.get(), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> getFullUserdetails(Integer userId) throws QuestaException {
-		System.out.println("Fetching record for userid["+userId+"]");
+		log.info("Fetching record for userid["+userId+"]");
 		User user = userRepository.findById(userId).get();
 		user.setQuestionList(questionService.getQuestionListByUserId(userId));
 		return new ResponseEntity<>(user, HttpStatus.OK);

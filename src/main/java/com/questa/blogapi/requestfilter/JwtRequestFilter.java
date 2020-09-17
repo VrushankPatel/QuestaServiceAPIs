@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,17 +27,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserService userDetailsService;
 
+	
+	private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
+
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		System.out.println(request.getRequestURI());
+		log.info("Calling doFilterInternal for ["+request.getRequestURI()+"] endpoint");
 		if ( !ConstantUtil.AUTH_IGNORE_ENDPOINT.contains(request.getRequestURI())) {
 				//!request.getRequestURI().equalsIgnoreCase("/signup") && !request.getRequestURI().equalsIgnoreCase("/login")) {
 			final String authorizationHeader = request.getHeader("Authorization");
 			String username = null;
 			String token = null;
 			if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+				log.info("Authorization header not found in request");
 				configResponse(response);
 			}else {
 			//if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
@@ -49,9 +55,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 								userDetails, null, userDetails.getAuthorities());
 						usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 						SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+						log.info("Authorization successful");
 					}
 				}
 				}catch (Exception e) {
+					log.info("Authorization falied ["+e.getMessage() +"]");
 					configResponse(response);
 				}
 			}
