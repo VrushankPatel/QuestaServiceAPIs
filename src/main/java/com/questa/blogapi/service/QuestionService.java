@@ -125,6 +125,13 @@ public class QuestionService {
 		return questionList;
 	}
 	
+	public List<Question> findAllBySubjectTopic(Question question) {
+		List<Question> questionList = questionRepository.findBySubjectIgnoreCaseContainingAndTopicIgnoreCaseContaining(question.getSubject(), question.getTopic());
+		questionList.stream().forEach(que -> que.setAnswerList(getAnswerListByQuestionId(que.getQuestionId())));
+		questionList.stream().forEach(que -> que.setFollowerList(getFollowerListByQuestionId(que.getQuestionId())));
+		return questionList;
+	}
+	
 	private Question findAllQuestionsByQuestionId(Integer QuestionId) {
 		Question question = questionRepository.findById(QuestionId).get();
 		question.setAnswerList(getAnswerListByQuestionId(question.getQuestionId()));

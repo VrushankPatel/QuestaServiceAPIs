@@ -73,4 +73,11 @@ public class QuestionController {
 		log.info("Calling "+ ConstantUtil.FIND_ALL_BY_ANSWER_ENDPOINT +" endpoint");
 		return questionService.findAllByAnswer(userId);
 	}
+	
+	@RequestMapping(value = ConstantUtil.FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	@ResponseBody
+	public List<Question> findAllBySubjectTopic(@RequestBody Question question) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT +" endpoint");
+		return questionService.findAllBySubjectTopic(question);
+	}
 }

@@ -17,7 +17,8 @@ public class ConstantUtil {
 	public static final String CREATE_FEEDBACK_ENDPOINT = "/createfeedback";
 	public static final String FIND_ALL_QUESTIONS_ENDPOINT = "/findallquestions";
 	public static final String FIND_ALL_BY_FOLLOWER_ENDPOINT = "/findallbyfollower/{userId}";
-	public static final String FIND_ALL_BY_ANSWER_ENDPOINT = "/findallbyAnswer/{userId}";
+	public static final String FIND_ALL_BY_ANSWER_ENDPOINT = "/findallbyanswer/{userId}";
+	public static final String FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT = "/findallbysubjecttopic";
 	
 	public static final List<String> AUTH_IGNORE_ENDPOINT = List.of(LOGIN_ENDPOINT,SIGNUP_ENDPOINT);
 
