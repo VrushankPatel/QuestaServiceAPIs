@@ -56,9 +56,9 @@ public class QuestionController {
 	}
 	
 	@RequestMapping(value = ConstantUtil.FIND_ALL_QUESTIONS_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
-	public List<Question> findAllQuestions() throws QuestaException {
+	public List<Question> findAllQuestions(@PathVariable Integer userId) throws QuestaException {
 		log.info("Calling "+ ConstantUtil.FIND_ALL_QUESTIONS_ENDPOINT +" endpoint");
-		return questionService.findAllQuestions(null);
+		return questionService.findAllQuestions(userId);
 	}
 	
 	@RequestMapping(value = ConstantUtil.FIND_ALL_BY_FOLLOWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)

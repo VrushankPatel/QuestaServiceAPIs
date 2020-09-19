@@ -47,11 +47,23 @@ public class Question implements Serializable {
 	
 	@JsonInclude()
 	@Transient
+	private Integer noOfAnswers;
+	
+	@JsonInclude()
+	@Transient
 	private List<Answer> answerList;
 	
 	@JsonInclude()
 	@Transient
-	private List<Follower> followerList;
+	private Integer noOfFollowers;
+
+	@JsonInclude()
+	@Transient
+	private Integer noOfLikes;
+	
+	@JsonInclude()
+	@Transient
+	private Follower followerByCurrentUser;
 
 	public Integer getQuestionId() {
 		return questionId;
@@ -108,13 +120,37 @@ public class Question implements Serializable {
 	public void setAnswerList(List<Answer> answerList) {
 		this.answerList = answerList;
 	}
-
-	public List<Follower> getFollowerList() {
-		return followerList;
+	
+	public Follower getFollowerByCurrentUser() {
+		return followerByCurrentUser;
 	}
 
-	public void setFollowerList(List<Follower> followerList) {
-		this.followerList = followerList;
+	public void setFollowerByCurrentUser(Follower followerByCurrentUser) {
+		this.followerByCurrentUser = followerByCurrentUser;
+	}
+
+	public Integer getNoOfAnswers() {
+		return noOfAnswers;
+	}
+
+	public void setNoOfAnswers(Integer noOfAnswers) {
+		this.noOfAnswers = noOfAnswers;
+	}
+
+	public Integer getNoOfFollowers() {
+		return noOfFollowers;
+	}
+
+	public void setNoOfFollowers(Integer noOfFollowers) {
+		this.noOfFollowers = noOfFollowers;
+	}
+
+	public Integer getNoOfLikes() {
+		return noOfLikes;
+	}
+
+	public void setNoOfLikes(Integer noOfLikes) {
+		this.noOfLikes = noOfLikes;
 	}
 
 	@Override

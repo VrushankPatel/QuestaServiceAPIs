@@ -1,7 +1,6 @@
 package com.questa.blogapi.model;
 
 import java.sql.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +39,15 @@ public class Answer {
 
 	@JsonInclude()
 	@Transient
-	private List<UserFeedback> userFeedbackList;
+	private UserFeedback answerFeedbackByCurrentUser;
+	
+	@JsonInclude()
+	@Transient
+	private Integer noOfLikes;
+	
+	@JsonInclude()
+	@Transient
+	private Integer noOfDislikes;
 
 	public Integer getAnswerId() {
 		return answerId;
@@ -82,19 +89,35 @@ public class Answer {
 		this.createDate = createDate;
 	}
 
-	public List<UserFeedback> getUserFeedbackList() {
-		return userFeedbackList;
+	
+	public UserFeedback getAnswerFeedbackByCurrentUser() {
+		return answerFeedbackByCurrentUser;
 	}
 
-	public void setUserFeedbackList(List<UserFeedback> userFeedbackList) {
-		this.userFeedbackList = userFeedbackList;
+	public void setAnswerFeedbackByCurrentUser(UserFeedback answerFeedbackByCurrentUser) {
+		this.answerFeedbackByCurrentUser = answerFeedbackByCurrentUser;
+	}
+
+	public Integer getNoOfLikes() {
+		return noOfLikes;
+	}
+
+	public void setNoOfLikes(Integer noOfLikes) {
+		this.noOfLikes = noOfLikes;
+	}
+
+	public Integer getNoOfDislikes() {
+		return noOfDislikes;
+	}
+
+	public void setNoOfDislikes(Integer noOfDislikes) {
+		this.noOfDislikes = noOfDislikes;
 	}
 
 	@Override
 	public String toString() {
 		return "Answer [answerId=" + answerId + ", questionId=" + questionId + ", userId=" + userId + ", answerDesc="
-				+ answerDesc + ", createDate=" + createDate + "]";
+				+ answerDesc + ", createDate=" + createDate + ", answerFeedbackByCurrentUser="
+				+ answerFeedbackByCurrentUser + ", noOfLikes=" + noOfLikes + ", noOfDislikes=" + noOfDislikes + "]";
 	}
-	
-	
 }

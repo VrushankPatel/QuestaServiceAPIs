@@ -102,7 +102,7 @@ public class UserService implements UserDetailsService {
 	public ResponseEntity<Object> getFullUserdetails(Integer userId) throws QuestaException {
 		log.info("Fetching record for userid["+userId+"]");
 		User user = userRepository.findById(userId).get();
-		user.setQuestionList(questionService.getQuestionListByUserId(userId));
+		user.setQuestionList(questionService.findAllQuestions(userId));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 

@@ -23,6 +23,9 @@ public class Follower {
 	@Column(name = "USER_ID", nullable = false)
 	private Integer userId;
 
+	@Column(name = "LIKED", nullable = false)
+	private Boolean liked = false;
+	
 	public Integer getFolllowerId() {
 		return folllowerId;
 	}
@@ -45,6 +48,14 @@ public class Follower {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+	
+	public Boolean getLiked() {
+		return liked;
+	}
+
+	public void setLiked(Boolean liked) {
+		this.liked = liked;
 	}
 
 	@Override

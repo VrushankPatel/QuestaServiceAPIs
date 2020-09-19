@@ -68,8 +68,6 @@ public class UserFeedback {
 		this.userId = userId;
 	}
 
-	
-
 	public Boolean getLiked() {
 		return liked;
 	}
@@ -100,7 +98,5 @@ public class UserFeedback {
 				+ ", userId=" + userId + ", liked=" + liked + ", unliked=" + unliked + ", reportDesc=" + reportDesc
 				+ "]";
 	}
-
-	
 	
 }
