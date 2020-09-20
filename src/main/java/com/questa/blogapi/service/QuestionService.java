@@ -50,12 +50,14 @@ public class QuestionService {
 	
 	public ResponseEntity<Object> createAnswer(Answer answer) throws QuestaException {
 		log.info(answer.toString());
+		answerRepository.findByQuestionIdAndUserId(answer.getQuestionId(), answer.getUserId()).ifPresent(ans -> answer.setAnswerId(ans.getAnswerId()));
 		answerRepository.save(answer);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> createFollower(Follower follower) throws QuestaException {
 		log.info(follower.toString());
+		followerRepository.findByQuestionIdAndUserId(follower.getQuestionId(), follower.getUserId()).ifPresent(flwer -> follower.setFolllowerId(flwer.getFolllowerId()));
 		followerRepository.save(follower);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
@@ -63,6 +65,8 @@ public class QuestionService {
 
 	public ResponseEntity<Object> createUserFeedback(UserFeedback userFeedback) {
 		log.info(userFeedback.toString());
+		userFeedbackRepository.findByQuestionIdAndAnswerIdAndUserId(userFeedback.getQuestionId(), userFeedback.getAnswerId(), userFeedback.getUserId())
+					.ifPresent(fback -> userFeedback.setFeedbackId(fback.getFeedbackId()));
 		userFeedbackRepository.save(userFeedback);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}

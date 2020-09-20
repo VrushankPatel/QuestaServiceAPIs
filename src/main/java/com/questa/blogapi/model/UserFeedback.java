@@ -16,7 +16,7 @@ public class UserFeedback {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "feedback_seq")
 	@SequenceGenerator(name="feedback_seq", sequenceName = "feedback_seq")
 	@Column(name = "FEEDBACK_ID", updatable = false)
-	private Integer feedbackrId;
+	private Integer feedbackId;
 	
 	@Column(name = "ANSWER_ID", nullable = false)
 	private Integer answerId;
@@ -36,12 +36,12 @@ public class UserFeedback {
 	@Column(name = "REPORT_DESC", length = 1000)
 	private String reportDesc;
 
-	public Integer getFeedbackrId() {
-		return feedbackrId;
+	public Integer getFeedbackId() {
+		return feedbackId;
 	}
 
-	public void setFeedbackrId(Integer feedbackrId) {
-		this.feedbackrId = feedbackrId;
+	public void setFeedbackId(Integer feedbackId) {
+		this.feedbackId = feedbackId;
 	}
 
 	public Integer getAnswerId() {
@@ -94,7 +94,7 @@ public class UserFeedback {
 
 	@Override
 	public String toString() {
-		return "UserFeedback [feedbackrId=" + feedbackrId + ", answerId=" + answerId + ", questionId=" + questionId
+		return "UserFeedback [feedbackrId=" + feedbackId + ", answerId=" + answerId + ", questionId=" + questionId
 				+ ", userId=" + userId + ", liked=" + liked + ", unliked=" + unliked + ", reportDesc=" + reportDesc
 				+ "]";
 	}

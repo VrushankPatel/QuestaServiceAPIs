@@ -10,6 +10,7 @@ public interface UserFeedbackRepository extends CrudRepository<UserFeedback, Int
 
 	Optional<UserFeedback> findByAnswerId(Integer answerId);
 	Optional<UserFeedback> findByAnswerIdAndUserId(Integer answerId, Integer userId);
+	Optional<UserFeedback> findByQuestionIdAndAnswerIdAndUserId(Integer questionId, Integer answerId, Integer userId);
 	Integer countByAnswerIdAndLiked(Integer answerId, Boolean liked);
 	Integer countByAnswerIdAndUnliked(Integer answerId, Boolean unliked);
 }
