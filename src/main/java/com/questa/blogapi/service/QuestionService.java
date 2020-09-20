@@ -58,8 +58,13 @@ public class QuestionService {
 	public ResponseEntity<Object> createFollower(Follower follower) throws QuestaException {
 		log.info(follower.toString());
 		followerRepository.findByQuestionIdAndUserId(follower.getQuestionId(), follower.getUserId()).ifPresent(flwer -> follower.setFolllowerId(flwer.getFolllowerId()));
-		followerRepository.save(follower);
-		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		if(follower.getFollowed()) {
+			followerRepository.save(follower);
+			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		}else {
+			followerRepository.delete(follower);
+			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_DELETED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		}
 	}
 	
 
@@ -115,7 +120,6 @@ public class QuestionService {
 		question.setAnswerList(getAnswerListByQuestionId(question.getQuestionId(),userId));
 		question.setNoOfAnswers(answerRepository.countByQuestionId(question.getQuestionId()));
 		question.setNoOfFollowers(followerRepository.countByQuestionId(question.getQuestionId()));
-		question.setNoOfLikes(followerRepository.countByQuestionIdAndLiked(question.getQuestionId(),true));
 		followerRepository.findByQuestionIdAndUserId(question.getQuestionId(),userId).ifPresent(follower -> question.setFollowerByCurrentUser(follower));
 		return question;
 	}

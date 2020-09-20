@@ -44,5 +44,6 @@ public class ConstantUtil {
 	public static final String ANSWER_CREATED_MESSAGE = "Answer successfully created...";
 	public static final String USER_FEEDBACK_CREATED_MESSAGE = "User feedback successfully created...";
 	public static final String FOLLOWER_CREATED_MESSAGE = "Follower successfully created...";
+	public static final String FOLLOWER_DELETED_MESSAGE = "Follower successfully deleted...";
 	
 }

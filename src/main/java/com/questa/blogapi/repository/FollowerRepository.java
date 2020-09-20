@@ -12,5 +12,4 @@ public interface FollowerRepository extends CrudRepository<Follower, Integer>{
 	Iterable<Follower> findByUserId(Integer userId);
 	Optional<Follower> findByQuestionIdAndUserId(Integer questionId, Integer userId);
 	Integer countByQuestionId(Integer questionId);
-	Integer countByQuestionIdAndLiked(Integer questionId, Boolean liked);
 }

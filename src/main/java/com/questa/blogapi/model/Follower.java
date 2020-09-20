@@ -23,8 +23,8 @@ public class Follower {
 	@Column(name = "USER_ID", nullable = false)
 	private Integer userId;
 
-	@Column(name = "LIKED", nullable = false)
-	private Boolean liked = false;
+	@Column(name = "FOLLOWED", nullable = false)
+	private Boolean followed = false;
 	
 	public Integer getFolllowerId() {
 		return folllowerId;
@@ -49,19 +49,19 @@ public class Follower {
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	
-	public Boolean getLiked() {
-		return liked;
+
+	public Boolean getFollowed() {
+		return followed;
 	}
 
-	public void setLiked(Boolean liked) {
-		this.liked = liked;
+	public void setFollowed(Boolean followed) {
+		this.followed = followed;
 	}
 
 	@Override
 	public String toString() {
-		return "Follower [folllowerId=" + folllowerId + ", questionId=" + questionId + ", userId=" + userId + "]";
+		return "Follower [folllowerId=" + folllowerId + ", questionId=" + questionId + ", userId=" + userId
+				+ ", followed=" + followed + "]";
 	}
-	
 	
 }
