@@ -35,6 +35,13 @@ public class UserController {
 		return ResponseEntity.ok(authenticationResponse);
 	}
 
+	@RequestMapping(value = ConstantUtil.UPDATE_USER_PROFILE_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public ResponseEntity<Object> udpateUserProfile(@RequestBody User user) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.UPDATE_USER_PROFILE_ENDPOINT +" endpoint");
+		return userDetailsService.updateUserProfile(user);
+
+	}
+	
 	@RequestMapping(value = ConstantUtil.SIGNUP_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> createUser(@RequestBody User user) throws QuestaException {
 		log.info("Calling "+ ConstantUtil.SIGNUP_ENDPOINT +" endpoint");

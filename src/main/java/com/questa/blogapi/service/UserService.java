@@ -47,10 +47,8 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
 
-
 	@Autowired
 	private QuestionService questionService;
-	
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -93,6 +91,18 @@ public class UserService implements UserDetailsService {
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
+	public ResponseEntity<Object> updateUserProfile(User user) throws QuestaException {
+		Optional<User> userExist = userRepository.findByUserId(user.getUserId());
+		if (userExist.isPresent()) {
+			user.setPassword(userExist.get().getPassword());
+			userRepository.save(user);
+			log.info("User profile updated ["+user.toString()+"]");
+			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_UPDATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		}
+		log.info("User profile not found ["+user.toString()+"]");
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_NOT_FOUND_MESSAGE,ConstantUtil.FAILURE_CODE,true), HttpStatus.OK);
+	}
+	
 	public ResponseEntity<Object> getUserdetails(Integer userId) throws QuestaException {
 		log.info("Fetching record for userid["+userId+"]");
 		Optional<User> user = userRepository.findById(userId);
@@ -102,7 +112,7 @@ public class UserService implements UserDetailsService {
 	public ResponseEntity<Object> getFullUserdetails(Integer userId) throws QuestaException {
 		log.info("Fetching record for userid["+userId+"]");
 		User user = userRepository.findById(userId).get();
-		user.setQuestionList(questionService.findAllQuestions(userId));
+		user.setQuestionList(questionService.findAllQuestionsByUser(userId));
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 

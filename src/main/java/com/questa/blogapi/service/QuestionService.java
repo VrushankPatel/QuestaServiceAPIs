@@ -2,8 +2,6 @@ package com.questa.blogapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,32 +75,29 @@ public class QuestionService {
 	}
 	
 	public List<Question> findAllQuestions(Integer userId) {
-		Iterable<Question> questionIterable = questionRepository.findAll();
-		List<Question> questionList = StreamSupport.stream(questionIterable.spliterator(), false)
-				    .collect(Collectors.toList());
+		List<Question> questionList = (List<Question>) questionRepository.findByOrderByCreateDateDesc();
+		return fetchAnswersAndFeedbacks(questionList, userId);
+	}
+
+	public List<Question> findAllQuestionsByUser(Integer userId) {
+		List<Question> questionList = questionRepository.findByUserIdOrderByCreateDateDesc(userId);
 		return fetchAnswersAndFeedbacks(questionList, userId);
 	}
 
 	public List<Question> findAllByFollower(Integer userId) {
-		Iterable<Follower> followerIterable = followerRepository.findByUserId(userId);
-		List<Follower> followerList = StreamSupport.stream(followerIterable.spliterator(), false)
-				    .collect(Collectors.toList());
 		List<Question> questionList = new ArrayList<>();
-		followerList.forEach(follwer -> questionList.add(findAllQuestionsByLoginUser(follwer.getQuestionId(),userId)));
+		followerRepository.findByUserId(userId).forEach(follwer -> questionList.add(findAllQuestionsByLoginUser(follwer.getQuestionId(),userId)));
 		return fetchAnswersAndFeedbacks(questionList, userId);
 	}
 
 	public List<Question> findAllByAnswer(Integer userId) {
-		Iterable<Answer> answerIterable = answerRepository.findByUserId(userId);
-		List<Answer> answerList = StreamSupport.stream(answerIterable.spliterator(), false)
-				    .collect(Collectors.toList());
 		List<Question> questionList = new ArrayList<>();
-		answerList.forEach(answer -> questionList.add(findAllQuestionsByLoginUser(answer.getQuestionId(), userId)));
+		answerRepository.findByUserIdOrderByCreateDateDesc(userId).forEach(answer -> questionList.add(findAllQuestionsByLoginUser(answer.getQuestionId(), userId)));
 		return fetchAnswersAndFeedbacks(questionList, userId);
 	}
 	
 	public List<Question> findAllBySubjectTopic(Question question) {
-		List<Question> questionList = questionRepository.findBySubjectIgnoreCaseContainingAndTopicIgnoreCaseContaining(question.getSubject(), question.getTopic());
+		List<Question> questionList = questionRepository.findBySubjectIgnoreCaseContainingAndTopicIgnoreCaseContainingOrderByCreateDateDesc(question.getSubject(), question.getTopic());
 		return fetchAnswersAndFeedbacks(questionList, question.getUserId());
 	}
 	
@@ -117,18 +112,13 @@ public class QuestionService {
 	}
 	
 	private Question fetchAnswersAndFeedbacksByQuestion(Question question, Integer userId) {
-		question.setAnswerList(getAnswerListByQuestionId(question.getQuestionId(),userId));
+		List<Answer> answerList = answerRepository.findByQuestionIdOrderByCreateDateDesc(question.getQuestionId());
+		answerList.stream().forEach(ans -> fetchAnswerDetails(ans, userId));
+		question.setAnswerList(answerList);
 		question.setNoOfAnswers(answerRepository.countByQuestionId(question.getQuestionId()));
 		question.setNoOfFollowers(followerRepository.countByQuestionId(question.getQuestionId()));
 		followerRepository.findByQuestionIdAndUserId(question.getQuestionId(),userId).ifPresent(follower -> question.setFollowerByCurrentUser(follower));
 		return question;
-	}
-	private List<Answer> getAnswerListByQuestionId(Integer questionId, Integer userId) throws QuestaException {
-		Iterable<Answer> answerIterable = answerRepository.findByQuestionId(questionId);
-		List<Answer> answerList = StreamSupport.stream(answerIterable.spliterator(), false)
-				    .collect(Collectors.toList());
-		answerList.stream().forEach(ans -> fetchAnswerDetails(ans, userId));
-		return answerList;
 	}
 	
 	private Answer fetchAnswerDetails(Answer answer, Integer userId) {
