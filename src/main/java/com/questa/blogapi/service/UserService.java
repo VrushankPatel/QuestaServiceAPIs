@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.AuthenticationRequest;
@@ -94,7 +95,7 @@ public class UserService implements UserDetailsService {
 	public ResponseEntity<Object> updateUserProfile(User user) throws QuestaException {
 		Optional<User> userExist = userRepository.findByUserId(user.getUserId());
 		if (userExist.isPresent()) {
-			user.setPassword(userExist.get().getPassword());
+			user.setPassword(StringUtils.hasText(user.getPassword())? passwordEncoder.encode(user.getPassword()):userExist.get().getPassword());
 			userRepository.save(user);
 			log.info("User profile updated ["+user.toString()+"]");
 			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_UPDATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
