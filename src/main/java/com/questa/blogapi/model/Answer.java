@@ -39,7 +39,7 @@ public class Answer {
 
 	@JsonInclude()
 	@Transient
-	private UserFeedback answerFeedbackByCurrentUser;
+	private AnswerFeedback answerFeedbackByCurrentUser;
 	
 	@JsonInclude()
 	@Transient
@@ -90,11 +90,11 @@ public class Answer {
 	}
 
 	
-	public UserFeedback getAnswerFeedbackByCurrentUser() {
+	public AnswerFeedback getAnswerFeedbackByCurrentUser() {
 		return answerFeedbackByCurrentUser;
 	}
 
-	public void setAnswerFeedbackByCurrentUser(UserFeedback answerFeedbackByCurrentUser) {
+	public void setAnswerFeedbackByCurrentUser(AnswerFeedback answerFeedbackByCurrentUser) {
 		this.answerFeedbackByCurrentUser = answerFeedbackByCurrentUser;
 	}
 

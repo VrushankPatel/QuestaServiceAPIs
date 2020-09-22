@@ -15,7 +15,8 @@ public class ConstantUtil {
 	public static final String CREATE_QUESTION_ENDPOINT = "/createquestion";
 	public static final String CREATE_ANSWER_ENDPOINT = "/createanswer";
 	public static final String CREATE_FOLLWER_ENDPOINT = "/createfollower";
-	public static final String CREATE_FEEDBACK_ENDPOINT = "/createfeedback";
+	public static final String CREATE_ANSWER_FEEDBACK_ENDPOINT = "/createfeedback";
+	public static final String CREATE_QUESTION_FEEDBACK_ENDPOINT = "/createquestionfeedback";
 	public static final String FIND_ALL_QUESTIONS_ENDPOINT = "/findallquestions/{userId}";
 	public static final String FIND_ALL_BY_FOLLOWER_ENDPOINT = "/findallbyfollower/{userId}";
 	public static final String FIND_ALL_BY_ANSWER_ENDPOINT = "/findallbyanswer/{userId}";

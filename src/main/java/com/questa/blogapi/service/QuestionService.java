@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service;
 
 import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.Answer;
-import com.questa.blogapi.model.UserFeedback;
+import com.questa.blogapi.model.AnswerFeedback;
 import com.questa.blogapi.model.Follower;
 import com.questa.blogapi.model.QuestaResponse;
 import com.questa.blogapi.model.Question;
-import com.questa.blogapi.repository.UserFeedbackRepository;
+import com.questa.blogapi.model.QuestionFeedback;
+import com.questa.blogapi.repository.AnswerFeedbackRepository;
 import com.questa.blogapi.repository.AnswerRepository;
 import com.questa.blogapi.repository.FollowerRepository;
+import com.questa.blogapi.repository.QuestionFeedbackRepository;
 import com.questa.blogapi.repository.QuestionRepository;
 import com.questa.blogapi.util.ConstantUtil;
 
@@ -35,8 +37,10 @@ public class QuestionService {
 	FollowerRepository followerRepository;
 	
 	@Autowired
-	UserFeedbackRepository userFeedbackRepository;
+	AnswerFeedbackRepository answerFeedbackRepository;
 	
+	@Autowired
+	QuestionFeedbackRepository questionFeedbackRepository;
 	
 	private static final Logger log = LoggerFactory.getLogger(QuestionService.class);
 
@@ -65,12 +69,19 @@ public class QuestionService {
 		}
 	}
 	
-
-	public ResponseEntity<Object> createUserFeedback(UserFeedback userFeedback) {
-		log.info(userFeedback.toString());
-		userFeedbackRepository.findByQuestionIdAndAnswerIdAndUserId(userFeedback.getQuestionId(), userFeedback.getAnswerId(), userFeedback.getUserId())
-					.ifPresent(fback -> userFeedback.setFeedbackId(fback.getFeedbackId()));
-		userFeedbackRepository.save(userFeedback);
+	public ResponseEntity<Object> createQuestionFeedback(QuestionFeedback questionFeedback) {
+		log.info(questionFeedback.toString());
+		questionFeedbackRepository.findByQuestionIdAndUserId(questionFeedback.getQuestionId(), questionFeedback.getUserId())
+					.ifPresent(qback -> questionFeedback.setFeedbackId(qback.getFeedbackId()));
+		questionFeedbackRepository.save(questionFeedback);
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+	}
+	
+	public ResponseEntity<Object> createAnswerFeedback(AnswerFeedback answerFeedback) {
+		log.info(answerFeedback.toString());
+		answerFeedbackRepository.findByQuestionIdAndAnswerIdAndUserId(answerFeedback.getQuestionId(), answerFeedback.getAnswerId(), answerFeedback.getUserId())
+					.ifPresent(fback -> answerFeedback.setFeedbackId(fback.getFeedbackId()));
+		answerFeedbackRepository.save(answerFeedback);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
@@ -115,6 +126,8 @@ public class QuestionService {
 		List<Answer> answerList = answerRepository.findByQuestionIdOrderByCreateDateDesc(question.getQuestionId());
 		answerList.stream().forEach(ans -> fetchAnswerDetails(ans, userId));
 		question.setAnswerList(answerList);
+		question.setNoOfLikes(questionFeedbackRepository.countByQuestionIdAndLiked(question.getQuestionId(), true));
+		question.setNoOfDislikes(questionFeedbackRepository.countByQuestionIdAndLiked(question.getQuestionId(), true));
 		question.setNoOfAnswers(answerRepository.countByQuestionId(question.getQuestionId()));
 		question.setNoOfFollowers(followerRepository.countByQuestionId(question.getQuestionId()));
 		followerRepository.findByQuestionIdAndUserId(question.getQuestionId(),userId).ifPresent(follower -> question.setFollowerByCurrentUser(follower));
@@ -122,9 +135,9 @@ public class QuestionService {
 	}
 	
 	private Answer fetchAnswerDetails(Answer answer, Integer userId) {
-		answer.setNoOfDislikes(userFeedbackRepository.countByAnswerIdAndUnliked(answer.getAnswerId(), true));
-		answer.setNoOfLikes(userFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
-		userFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(), userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
+		answer.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(answer.getAnswerId(), true));
+		answer.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
+		answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(), userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
 		return answer;
 	}
 }

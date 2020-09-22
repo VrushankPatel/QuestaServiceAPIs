@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.Answer;
+import com.questa.blogapi.model.AnswerFeedback;
 import com.questa.blogapi.model.Follower;
 import com.questa.blogapi.model.Question;
-import com.questa.blogapi.model.UserFeedback;
+import com.questa.blogapi.model.QuestionFeedback;
 import com.questa.blogapi.service.QuestionService;
 import com.questa.blogapi.util.ConstantUtil;
 
@@ -49,10 +50,16 @@ public class QuestionController {
 		return questionService.createFollower(follower);
 	}
 	
-	@RequestMapping(value = ConstantUtil.CREATE_FEEDBACK_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
-	public ResponseEntity<Object> createUserFeedback(@RequestBody UserFeedback userFeedback) throws QuestaException {
-		log.info("Calling "+ ConstantUtil.CREATE_FEEDBACK_ENDPOINT +" endpoint");
-		return questionService.createUserFeedback(userFeedback);
+	@RequestMapping(value = ConstantUtil.CREATE_QUESTION_FEEDBACK_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public ResponseEntity<Object> createQuestionFeedback(@RequestBody QuestionFeedback questionFeedback) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.CREATE_QUESTION_FEEDBACK_ENDPOINT +" endpoint");
+		return questionService.createQuestionFeedback(questionFeedback);
+	}
+	
+	@RequestMapping(value = ConstantUtil.CREATE_ANSWER_FEEDBACK_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public ResponseEntity<Object> createAnswerFeedback(@RequestBody AnswerFeedback userFeedback) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.CREATE_ANSWER_FEEDBACK_ENDPOINT +" endpoint");
+		return questionService.createAnswerFeedback(userFeedback);
 	}
 	
 	@RequestMapping(value = ConstantUtil.FIND_ALL_QUESTIONS_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)

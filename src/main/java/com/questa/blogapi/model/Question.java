@@ -63,6 +63,10 @@ public class Question implements Serializable {
 	
 	@JsonInclude()
 	@Transient
+	private Integer noOfDislikes;
+	
+	@JsonInclude()
+	@Transient
 	private Follower followerByCurrentUser;
 
 	public Integer getQuestionId() {
@@ -153,11 +157,21 @@ public class Question implements Serializable {
 		this.noOfLikes = noOfLikes;
 	}
 
+	public Integer getNoOfDislikes() {
+		return noOfDislikes;
+	}
+
+	public void setNoOfDislikes(Integer noOfDislikes) {
+		this.noOfDislikes = noOfDislikes;
+	}
+
 	@Override
 	public String toString() {
 		return "Question [questionId=" + questionId + ", userId=" + userId + ", subject=" + subject + ", topic=" + topic
-				+ ", questionDesc=" + questionDesc + ", createDate=" + createDate + "]";
+				+ ", questionDesc=" + questionDesc + ", createDate=" + createDate + ", noOfAnswers=" + noOfAnswers
+				+ ", answerList=" + answerList + ", noOfFollowers=" + noOfFollowers + ", noOfLikes=" + noOfLikes
+				+ ", noOfDislikes=" + noOfDislikes  + "]";
 	}
-	
+
 	
 }

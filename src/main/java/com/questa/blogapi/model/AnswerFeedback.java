@@ -9,8 +9,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "USERFEEDBACK")
-public class UserFeedback {
+@Table(name = "ANSWERFEEDBACK")
+public class AnswerFeedback {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "feedback_seq")
@@ -94,9 +94,8 @@ public class UserFeedback {
 
 	@Override
 	public String toString() {
-		return "UserFeedback [feedbackrId=" + feedbackId + ", answerId=" + answerId + ", questionId=" + questionId
+		return "AnswerFeedback [feedbackId=" + feedbackId + ", answerId=" + answerId + ", questionId=" + questionId
 				+ ", userId=" + userId + ", liked=" + liked + ", unliked=" + unliked + ", reportDesc=" + reportDesc
 				+ "]";
-	}
-	
+	}	
 }
