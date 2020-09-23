@@ -38,6 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		if ( !ConstantUtil.AUTH_IGNORE_ENDPOINT.contains(request.getRequestURI())) {
 				//!request.getRequestURI().equalsIgnoreCase("/signup") && !request.getRequestURI().equalsIgnoreCase("/login")) {
 			final String authorizationHeader = request.getHeader("Authorization");
+			log.info("Authorization header[" + authorizationHeader + "]");
 			String username = null;
 			String token = null;
 			if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
