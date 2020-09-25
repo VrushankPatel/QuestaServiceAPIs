@@ -126,6 +126,7 @@ public class QuestionService {
 		List<Answer> answerList = answerRepository.findByQuestionIdOrderByCreateDateDesc(question.getQuestionId());
 		answerList.stream().forEach(ans -> fetchAnswerDetails(ans, userId));
 		question.setAnswerList(answerList);
+		questionFeedbackRepository.findByQuestionIdAndUserId(question.getQuestionId(), userId).ifPresent(quefb -> question.setQuestionFeedbackByCurrentUser(quefb));
 		question.setNoOfLikes(questionFeedbackRepository.countByQuestionIdAndLiked(question.getQuestionId(), true));
 		question.setNoOfDislikes(questionFeedbackRepository.countByQuestionIdAndLiked(question.getQuestionId(), true));
 		question.setNoOfAnswers(answerRepository.countByQuestionId(question.getQuestionId()));

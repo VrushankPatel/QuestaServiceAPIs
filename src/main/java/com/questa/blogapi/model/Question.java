@@ -68,6 +68,10 @@ public class Question implements Serializable {
 	@JsonInclude()
 	@Transient
 	private Follower followerByCurrentUser;
+	
+	@JsonInclude()
+	@Transient
+	private QuestionFeedback questionFeedbackByCurrentUser;
 
 	public Integer getQuestionId() {
 		return questionId;
@@ -163,6 +167,14 @@ public class Question implements Serializable {
 
 	public void setNoOfDislikes(Integer noOfDislikes) {
 		this.noOfDislikes = noOfDislikes;
+	}
+	
+	public QuestionFeedback getQuestionFeedbackByCurrentUser() {
+		return questionFeedbackByCurrentUser;
+	}
+
+	public void setQuestionFeedbackByCurrentUser(QuestionFeedback questionFeedbackByCurrentUser) {
+		this.questionFeedbackByCurrentUser = questionFeedbackByCurrentUser;
 	}
 
 	@Override
