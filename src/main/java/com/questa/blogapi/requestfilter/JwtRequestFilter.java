@@ -2,7 +2,6 @@ package com.questa.blogapi.requestfilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -39,13 +38,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		if ( !ConstantUtil.AUTH_IGNORE_ENDPOINT.contains(request.getRequestURI())) {
 				//!request.getRequestURI().equalsIgnoreCase("/signup") && !request.getRequestURI().equalsIgnoreCase("/login")) {
 			final String authorizationHeader = request.getHeader("Authorization");
-			Enumeration<String> headerNames = request.getHeaderNames();
-		    if (headerNames != null) {
-		            while (headerNames.hasMoreElements()) {
-		            	String name =headerNames.nextElement();
-		            	log.info("Header: " + name + " : " + request.getHeader(name));
-		            }
-		    }
 			log.info("Authorization header[" + authorizationHeader + "]");
 			String username = null;
 			String token = null;
