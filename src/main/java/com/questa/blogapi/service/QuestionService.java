@@ -108,7 +108,7 @@ public class QuestionService {
 	}
 	
 	public List<Question> findAllBySubjectTopic(Question question) {
-		List<Question> questionList = questionRepository.findBySubjectIgnoreCaseContainingAndTopicIgnoreCaseContainingOrderByCreateDateDesc(question.getSubject(), question.getTopic());
+		List<Question> questionList = questionRepository.findBySubjectAndTopicIgnoreCaseContainingOrderByCreateDateDesc(question.getSubject(), question.getTopic());
 		return fetchAnswersAndFeedbacks(questionList, question.getUserId());
 	}
 	
