@@ -2,6 +2,7 @@ package com.questa.blogapi.requestfilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		log.info("Calling doFilterInternal for ["+request.getRequestURI()+"] endpoint");
-		if ( !ConstantUtil.AUTH_IGNORE_ENDPOINT.contains(request.getRequestURI())) {
+		if ( !List.of(ConstantUtil.AUTH_IGNORE_ENDPOINT).contains(request.getRequestURI())) {
 				//!request.getRequestURI().equalsIgnoreCase("/signup") && !request.getRequestURI().equalsIgnoreCase("/login")) {
 			final String authorizationHeader = request.getHeader("Authorization");
 			log.info("Authorization header[" + authorizationHeader + "]");

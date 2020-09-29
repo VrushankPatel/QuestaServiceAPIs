@@ -42,6 +42,13 @@ public class UserController {
 
 	}
 	
+	@RequestMapping(value = ConstantUtil.RESET_PASSWORD_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public ResponseEntity<Object> resetUserPassword(@RequestBody User user) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.RESET_PASSWORD_ENDPOINT +" endpoint"); 
+		return userDetailsService.resetUserPassword(user.getEmail());
+
+	}
+	
 	@RequestMapping(value = ConstantUtil.SIGNUP_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> createUser(@RequestBody User user) throws QuestaException {
 		log.info("Calling "+ ConstantUtil.SIGNUP_ENDPOINT +" endpoint");

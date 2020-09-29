@@ -1,13 +1,12 @@
 package com.questa.blogapi.util;
 
-import java.util.List;
-
 public class ConstantUtil {
 	
 	//UserController end-points
 	public static final String LOGIN_ENDPOINT = "/login";
 	public static final String SIGNUP_ENDPOINT = "/signup";
 	public static final String UPDATE_USER_PROFILE_ENDPOINT = "/updateuserprofile";
+	public static final String RESET_PASSWORD_ENDPOINT = "/resetpassword";
 	public static final String GETUSER_ENDPOINT = "/getuser/{userId}";
 	public static final String GETFULLUSER_ENDPOINT = "/getfulluser/{userId}";
 	
@@ -22,7 +21,7 @@ public class ConstantUtil {
 	public static final String FIND_ALL_BY_ANSWER_ENDPOINT = "/findallbyanswer/{userId}";
 	public static final String FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT = "/findallbysubjecttopic";
 	
-	public static final List<String> AUTH_IGNORE_ENDPOINT = List.of(LOGIN_ENDPOINT,SIGNUP_ENDPOINT);
+	public static final String[] AUTH_IGNORE_ENDPOINT = {LOGIN_ENDPOINT,SIGNUP_ENDPOINT,RESET_PASSWORD_ENDPOINT};
 
 	public static final String PRODUCE_APP_JSON = "application/json";
 	
@@ -43,6 +42,7 @@ public class ConstantUtil {
 	
 	public static final String USER_CREATED_MESSAGE = "User successfully created...";
 	public static final String USER_PROFILE_UPDATED_MESSAGE = "User profile successfully updated...";
+	public static final String USER_PASSWARD_RESET_MESSAGE = "User password reset successfully and send mail to user...";
 	public static final String USER_PROFILE_NOT_FOUND_MESSAGE = "User profile not found...";
 	public static final String QUESTION_CREATED_MESSAGE = "Question successfully created...";
 	public static final String ANSWER_CREATED_MESSAGE = "Answer successfully created...";

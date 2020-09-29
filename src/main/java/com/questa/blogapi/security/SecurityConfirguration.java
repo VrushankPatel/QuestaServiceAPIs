@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.questa.blogapi.requestfilter.JwtRequestFilter;
 import com.questa.blogapi.service.UserService;
+import com.questa.blogapi.util.ConstantUtil;
 
 
 @Configuration
@@ -34,8 +35,9 @@ public class SecurityConfirguration extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-			.authorizeRequests().antMatchers("/login").permitAll()
+			.authorizeRequests().antMatchers(ConstantUtil.AUTH_IGNORE_ENDPOINT).permitAll()
 			.antMatchers("/signup").permitAll()
+			.antMatchers("/resetuserpassword").permitAll()
 			.anyRequest().authenticated()
 			.and().sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);

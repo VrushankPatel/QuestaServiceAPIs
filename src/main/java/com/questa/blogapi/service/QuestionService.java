@@ -28,20 +28,20 @@ import com.questa.blogapi.util.ConstantUtil;
 public class QuestionService {
 
 	@Autowired
-	QuestionRepository questionRepository;
+	private QuestionRepository questionRepository;
 	
 	@Autowired
-	AnswerRepository answerRepository;
+	private AnswerRepository answerRepository;
 	
 	@Autowired
-	FollowerRepository followerRepository;
+	private FollowerRepository followerRepository;
 	
 	@Autowired
-	AnswerFeedbackRepository answerFeedbackRepository;
+	private AnswerFeedbackRepository answerFeedbackRepository;
 	
 	@Autowired
-	QuestionFeedbackRepository questionFeedbackRepository;
-	
+	private QuestionFeedbackRepository questionFeedbackRepository;
+		
 	private static final Logger log = LoggerFactory.getLogger(QuestionService.class);
 
 	public ResponseEntity<Object> createQuestion(Question question) throws QuestaException {

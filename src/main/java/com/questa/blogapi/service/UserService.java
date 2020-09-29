@@ -54,6 +54,8 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+	@Autowired
+	private NotificationService notificationService;
 	
 	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -89,6 +91,7 @@ public class UserService implements UserDetailsService {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userRepository.save(user);
 		log.info("User created ["+user.toString()+"]");
+		notificationService.sendNotification(user.getEmail(), "Account created in Questa", "Hi "+user.getFirstName() +  " " + user.getLastName() + "! Welcome to the Questa. Thanks,Questa Support");
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
@@ -98,9 +101,25 @@ public class UserService implements UserDetailsService {
 			user.setPassword(StringUtils.hasText(user.getPassword())? passwordEncoder.encode(user.getPassword()):userExist.get().getPassword());
 			userRepository.save(user);
 			log.info("User profile updated ["+user.toString()+"]");
+			notificationService.sendNotification(user.getEmail(), "Profile updated in Questa", "Hi "+user.getFirstName() +  " " + user.getLastName() + "! Your profile updated in the Questa. Thanks,Questa Support");
 			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_UPDATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 		}
 		log.info("User profile not found ["+user.toString()+"]");
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_NOT_FOUND_MESSAGE,ConstantUtil.FAILURE_CODE,true), HttpStatus.OK);
+	}
+	
+	public ResponseEntity<Object> resetUserPassword(String email) throws QuestaException {
+		Optional<User> userExist = userRepository.findByEmail(email);
+		if (userExist.isPresent()) {
+			User user = userExist.get();
+			String newPassword = "Welcome" + ((int)(Math.random()*1000));
+			user.setPassword(passwordEncoder.encode(newPassword));
+			userRepository.save(user);
+			log.info("User found ["+user.toString()+"]");
+			notificationService.sendNotification(user.getEmail(), "Password reset in Questa", "Hi "+user.getFirstName() +  " " + user.getLastName() + "! Please use default password["+newPassword+"] to login in  the Questa. Thanks,Questa Support");
+			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PASSWARD_RESET_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		}
+		log.info("User not found ["+email+"]");
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_NOT_FOUND_MESSAGE,ConstantUtil.FAILURE_CODE,true), HttpStatus.OK);
 	}
 	
