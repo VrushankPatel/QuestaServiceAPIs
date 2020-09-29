@@ -47,6 +47,11 @@ public class QuestionService {
 	public ResponseEntity<Object> createQuestion(Question question) throws QuestaException {
 		log.info(question.toString());
 		questionRepository.save(question);
+		Follower follower = new Follower();
+		follower.setQuestionId(question.getQuestionId());
+		follower.setUserId(question.getUserId());
+		follower.setFollowed(true);
+		followerRepository.save(follower);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.QUESTION_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
