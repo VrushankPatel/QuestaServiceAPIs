@@ -143,7 +143,7 @@ public class QuestionService {
 	private Answer fetchAnswerDetails(Answer answer, Integer userId) {
 		answer.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(answer.getAnswerId(), true));
 		answer.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
-		answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(), userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
+		answerFeedbackRepository.findByQuestionIdAndAnswerIdAndUserId(answer.getQuestionId(),answer.getAnswerId(),userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
 		return answer;
 	}
 }
