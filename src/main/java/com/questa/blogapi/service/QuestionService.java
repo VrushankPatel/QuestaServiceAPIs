@@ -84,7 +84,7 @@ public class QuestionService {
 	
 	public ResponseEntity<Object> createAnswerFeedback(AnswerFeedback answerFeedback) {
 		log.info(answerFeedback.toString());
-		answerFeedbackRepository.findByQuestionIdAndAnswerIdAndUserId(answerFeedback.getQuestionId(), answerFeedback.getAnswerId(), answerFeedback.getUserId())
+		answerFeedbackRepository.findByAnswerIdAndUserId(answerFeedback.getAnswerId(), answerFeedback.getUserId())
 					.ifPresent(fback -> answerFeedback.setFeedbackId(fback.getFeedbackId()));
 		answerFeedbackRepository.save(answerFeedback);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
@@ -143,7 +143,7 @@ public class QuestionService {
 	private Answer fetchAnswerDetails(Answer answer, Integer userId) {
 		answer.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(answer.getAnswerId(), true));
 		answer.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
-		answerFeedbackRepository.findByQuestionIdAndAnswerIdAndUserId(answer.getQuestionId(),answer.getAnswerId(),userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
+		answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(),userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
 		return answer;
 	}
 }

@@ -21,8 +21,6 @@ public class AnswerFeedback {
 	@Column(name = "ANSWER_ID", nullable = false)
 	private Integer answerId;
 	
-	@Column(name = "QUESTION_ID", nullable = false)
-	private Integer questionId;
 
 	@Column(name = "USER_ID", nullable = false)
 	private Integer userId;
@@ -52,13 +50,6 @@ public class AnswerFeedback {
 		this.answerId = answerId;
 	}
 
-	public Integer getQuestionId() {
-		return questionId;
-	}
-
-	public void setQuestionId(Integer questionId) {
-		this.questionId = questionId;
-	}
 
 	public Integer getUserId() {
 		return userId;
@@ -94,7 +85,7 @@ public class AnswerFeedback {
 
 	@Override
 	public String toString() {
-		return "AnswerFeedback [feedbackId=" + feedbackId + ", answerId=" + answerId + ", questionId=" + questionId
+		return "AnswerFeedback [feedbackId=" + feedbackId + ", answerId=" + answerId 
 				+ ", userId=" + userId + ", liked=" + liked + ", unliked=" + unliked + ", reportDesc=" + reportDesc
 				+ "]";
 	}	
