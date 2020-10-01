@@ -25,6 +25,8 @@ public class ConstantUtil {
 
 	public static final String PRODUCE_APP_JSON = "application/json";
 	
+	public static final Integer EMAIL_SERVICE_FAILURE_CODE = 551;
+	
 	public static final Integer FAILURE_CODE = 550;
 	public static final Integer SUCCESS_CODE = 200;
 	public static final Integer EMAIL_ERROR_CODE = 531;
