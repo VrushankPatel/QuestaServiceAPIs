@@ -6,9 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.Answer;
@@ -22,6 +24,7 @@ import com.questa.blogapi.repository.AnswerRepository;
 import com.questa.blogapi.repository.FollowerRepository;
 import com.questa.blogapi.repository.QuestionFeedbackRepository;
 import com.questa.blogapi.repository.QuestionRepository;
+import com.questa.blogapi.repository.UserRepository;
 import com.questa.blogapi.util.ConstantUtil;
 
 @Service("questionService")
@@ -42,6 +45,15 @@ public class QuestionService {
 	@Autowired
 	private QuestionFeedbackRepository questionFeedbackRepository;
 		
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private NotificationService notificationService;
+	
+	@Value("${spring.mail.username}")
+	private String fromEmail;
+	
 	private static final Logger log = LoggerFactory.getLogger(QuestionService.class);
 
 	public ResponseEntity<Object> createQuestion(Question question) throws QuestaException {
@@ -56,9 +68,27 @@ public class QuestionService {
 	}
 	
 	public ResponseEntity<Object> createAnswer(Answer answer) throws QuestaException {
-		log.info(answer.toString());
+		log.info("Saving answer details :: " + answer.toString());
 		answerRepository.findByQuestionIdAndUserId(answer.getQuestionId(), answer.getUserId()).ifPresent(ans -> answer.setAnswerId(ans.getAnswerId()));
 		answerRepository.save(answer);
+		
+		log.info("Sending notification mail to the questioned user...");
+		userRepository.findByUserId(answer.getUserId()).ifPresent(answeruser -> {
+			questionRepository.findByQuestionId(answer.getQuestionId()).ifPresent(question -> {
+				userRepository.findByUserId(question.getUserId()).ifPresent(user -> {
+					String text = "<p>Hi "+user.getFirstName() +  " " + user.getLastName() + "!</p><p>Your question has been commented by "+answeruser.getFirstName()+" as below:</p>"
+							+ "<p>Question: "+question.getQuestionDesc()+"</p>"
+							+ "<p>Answer: "+answer.getAnswerDesc()+"</p>"
+							+ "<p>Login <a href=\""+ServletUriComponentsBuilder.fromCurrentContextPath().toUriString()+"/Signin\">Here</a> to reply on the comment.</p>"
+							+ "<p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
+					notificationService.sendNotification(user.getEmail(), "Profile updated in Questa", text);
+				});
+			});
+		});
+	
+		
+		
+		
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
