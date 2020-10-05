@@ -37,6 +37,9 @@ public class User implements Serializable{
 	@Column(name="LAST_NAME", nullable = false)
 	private String lastName;
 	
+	@Column(name="NICKNAME", nullable = false)
+	private String nickName;
+	
 	@Column(name="EMAIL", nullable = false, unique = true)
 	private String email;
 	
@@ -152,11 +155,19 @@ public class User implements Serializable{
 		this.questionList = questionList;
 	}
 
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", role=" + role + ", birthdate=" + birthdate + ", grade=" + grade
-				+ ", country=" + country + ", school=" + school + "]";
+		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", nickName="
+				+ nickName + ", email=" + email + ", password=" + password + ", role=" + role + ", birthdate="
+				+ birthdate + ", grade=" + grade + ", country=" + country + ", school=" + school + "]";
 	}
 
 

@@ -47,6 +47,10 @@ public class Question implements Serializable {
 	
 	@JsonInclude()
 	@Transient
+	private String nickName;
+	
+	@JsonInclude()
+	@Transient
 	private Integer noOfAnswers;
 	
 	@JsonInclude()
@@ -175,6 +179,14 @@ public class Question implements Serializable {
 
 	public void setQuestionFeedbackByCurrentUser(QuestionFeedback questionFeedbackByCurrentUser) {
 		this.questionFeedbackByCurrentUser = questionFeedbackByCurrentUser;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	@Override

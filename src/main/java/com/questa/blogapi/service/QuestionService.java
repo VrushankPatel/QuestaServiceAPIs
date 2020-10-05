@@ -76,7 +76,7 @@ public class QuestionService {
 		userRepository.findByUserId(answer.getUserId()).ifPresent(answeruser -> {
 			questionRepository.findByQuestionId(answer.getQuestionId()).ifPresent(question -> {
 				userRepository.findByUserId(question.getUserId()).ifPresent(user -> {
-					String text = "<p>Hi "+user.getFirstName() +  " " + user.getLastName() + "!</p><p>Your question has been commented by "+answeruser.getFirstName()+" as below:</p>"
+					String text = "<p>Hi "+user.getNickName()+ "!</p><p>Your question has been commented by "+answeruser.getNickName()+" as below:</p>"
 							+ "<p>Question: "+question.getQuestionDesc()+"</p>"
 							+ "<p>Answer: "+answer.getAnswerDesc()+"</p>"
 							+ "<p>Login <a href=\""+ServletUriComponentsBuilder.fromCurrentContextPath().toUriString()+"/Signin\">Here</a> to reply on the comment.</p>"
@@ -153,7 +153,10 @@ public class QuestionService {
 	}
 	
 	private List<Question> fetchAnswersAndFeedbacks(List<Question> questionList, Integer userId) {
-		questionList.stream().forEach(que -> fetchAnswersAndFeedbacksByQuestion(que, userId));
+		questionList.stream().forEach(que -> {
+										userRepository.findByUserId(que.getQuestionId()).ifPresent(usr -> que.setNickName(usr.getNickName()));
+										fetchAnswersAndFeedbacksByQuestion(que, userId);
+									});
 		return questionList;
 	}
 	
@@ -171,6 +174,7 @@ public class QuestionService {
 	}
 	
 	private Answer fetchAnswerDetails(Answer answer, Integer userId) {
+		userRepository.findByUserId(answer.getQuestionId()).ifPresent(usr -> answer.setNickName(usr.getNickName()));
 		answer.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(answer.getAnswerId(), true));
 		answer.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
 		answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(),userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));

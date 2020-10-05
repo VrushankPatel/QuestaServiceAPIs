@@ -1,6 +1,7 @@
 package com.questa.blogapi.model;
 
 import java.sql.Date;
+import java.sql.Time;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,11 +33,18 @@ public class Answer {
 	
 	@Column(name = "ANSWER_DESC", nullable = false, length = 1000)
 	private String answerDesc;
+	
+	@Column(name="TIME_TAKEN", nullable = false)
+	private Time timeTaken;
 
 	@Column(name = "CREATE_DATE", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date createDate;
 
+	@JsonInclude()
+	@Transient
+	private String nickName;
+	
 	@JsonInclude()
 	@Transient
 	private AnswerFeedback answerFeedbackByCurrentUser;
@@ -88,8 +96,15 @@ public class Answer {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-
 	
+	public Time getTimeTaken() {
+		return timeTaken;
+	}
+
+	public void setTimeTaken(Time timeTaken) {
+		this.timeTaken = timeTaken;
+	}
+
 	public AnswerFeedback getAnswerFeedbackByCurrentUser() {
 		return answerFeedbackByCurrentUser;
 	}
@@ -114,10 +129,18 @@ public class Answer {
 		this.noOfDislikes = noOfDislikes;
 	}
 
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+	
 	@Override
 	public String toString() {
 		return "Answer [answerId=" + answerId + ", questionId=" + questionId + ", userId=" + userId + ", answerDesc="
-				+ answerDesc + ", createDate=" + createDate + ", answerFeedbackByCurrentUser="
-				+ answerFeedbackByCurrentUser + ", noOfLikes=" + noOfLikes + ", noOfDislikes=" + noOfDislikes + "]";
+				+ answerDesc + ", timeTaken=" + timeTaken + ", createDate=" + createDate + ", noOfLikes=" + noOfLikes
+				+ ", noOfDislikes=" + noOfDislikes + "]";
 	}
 }
