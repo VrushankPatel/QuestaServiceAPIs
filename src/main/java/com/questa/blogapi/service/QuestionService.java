@@ -19,6 +19,7 @@ import com.questa.blogapi.model.Follower;
 import com.questa.blogapi.model.QuestaResponse;
 import com.questa.blogapi.model.Question;
 import com.questa.blogapi.model.QuestionFeedback;
+import com.questa.blogapi.model.User;
 import com.questa.blogapi.repository.AnswerFeedbackRepository;
 import com.questa.blogapi.repository.AnswerRepository;
 import com.questa.blogapi.repository.FollowerRepository;
@@ -71,23 +72,21 @@ public class QuestionService {
 		log.info("Saving answer details :: " + answer.toString());
 		answerRepository.findByQuestionIdAndUserId(answer.getQuestionId(), answer.getUserId()).ifPresent(ans -> answer.setAnswerId(ans.getAnswerId()));
 		answerRepository.save(answer);
-		
+		List<String> emailIds = new ArrayList<>();
 		log.info("Sending notification mail to the questioned user...");
-		userRepository.findByUserId(answer.getUserId()).ifPresent(answeruser -> {
-			questionRepository.findByQuestionId(answer.getQuestionId()).ifPresent(question -> {
-				userRepository.findByUserId(question.getUserId()).ifPresent(user -> {
-					String text = "<p>Hi "+user.getNickName()+ "!</p><p>Your question has been commented by "+answeruser.getNickName()+" as below:</p>"
-							+ "<p>Question: "+question.getQuestionDesc()+"</p>"
-							+ "<p>Answer: "+answer.getAnswerDesc()+"</p>"
-							+ "<p>Login <a href=\""+ServletUriComponentsBuilder.fromCurrentContextPath().toUriString()+"/Signin\">Here</a> to reply on the comment.</p>"
-							+ "<p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
-					notificationService.sendNotification(user.getEmail(), "Profile updated in Questa", text);
-				});
+		followerRepository.findByQuestionId(answer.getQuestionId()).forEach(follower -> { //get question details for that
+			userRepository.findByUserId(follower.getUserId()).ifPresent(user -> {
+				emailIds.add(user.getEmail());
 			});
 		});
-	
-		
-		
+		if(!emailIds.isEmpty()) {
+			String text = "<p>Hi There!</p><p>Your question has been commented by "+userRepository.findByUserId(answer.getUserId()).orElse(new User()).getNickName()+" as below:</p>"
+					+ "<p>Question: "+questionRepository.findByQuestionId(answer.getQuestionId()).orElse(new Question()).getQuestionDesc()+"</p>"
+					+ "<p>Answer: "+answer.getAnswerDesc()+"</p>"
+					+ "<p>Login <a href=\""+ServletUriComponentsBuilder.fromCurrentContextPath().toUriString()+"/Signin\">Here</a> to reply on the comment.</p>"
+					+ "<p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
+			notificationService.sendBccNotification(emailIds.stream().toArray(String[]::new), "Profile updated in Questa", text);
+		}
 		
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
@@ -121,7 +120,21 @@ public class QuestionService {
 	}
 	
 	public List<Question> findAllQuestions(Integer userId) {
-		List<Question> questionList = (List<Question>) questionRepository.findByOrderByCreateDateDesc();
+		List<Question> questionList = questionRepository.findByOrderByCreateDateDesc();
+		return fetchAnswersAndFeedbacks(questionList, userId);
+	}
+	
+	public List<Question> findAllQuestionsForAdmin(Integer userId) {
+		List<Question> questionList = new ArrayList<>();
+		List<Integer> questionIdList = new ArrayList<>();
+		answerFeedbackRepository.findByUserIdAndReportDescNotNull(userId).ifPresent(ansFdBk ->{
+			answerRepository.findByAnswerId(ansFdBk.getAnswerId()).ifPresent(ans ->{
+				questionIdList.add(ans.getQuestionId());
+			});
+		});
+		questionRepository.findDistinctByQuestionId(questionIdList).forEach(que -> {
+			questionList.add(que);
+		});
 		return fetchAnswersAndFeedbacks(questionList, userId);
 	}
 
@@ -143,8 +156,12 @@ public class QuestionService {
 	}
 	
 	public List<Question> findAllBySubjectTopic(Question question) {
-		List<Question> questionList = questionRepository.findBySubjectAndTopicIgnoreCaseContainingOrderByCreateDateDesc(question.getSubject(), question.getTopic());
-		return fetchAnswersAndFeedbacks(questionList, question.getUserId());
+		List<Question> questionList = fetchAnswersAndFeedbacks(questionRepository.findBySubjectAndTopicIgnoreCaseContainingOrderByCreateDateDesc(question.getSubject(), question.getTopic()), question.getUserId());
+		List<Question> questionWithAnsList = new ArrayList<>();
+		questionList.forEach(que -> {
+			if(que.getNoOfAnswers()>0) questionWithAnsList.add(que);
+		});
+		return questionWithAnsList;
 	}
 	
 	private Question findAllQuestionsByLoginUser(Integer QuestionId, Integer userId) {

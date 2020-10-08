@@ -24,15 +24,25 @@ public class NotificationService {
 	}
 
 	public void sendNotification(String email, String subject, String body) {
-		/*
-		 * SimpleMailMessage mail = new SimpleMailMessage(); mail.setTo(email);
-		 * mail.setFrom(fromEmail); mail.setSubject(subject); mail.setText(body);
-		 */
 		try {
 			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 			helper.setText(body, true); 
 			helper.setTo(email);
+			helper.setSubject(subject);
+			helper.setFrom(fromEmail);
+			javaMailSender.send(mimeMessage);
+		} catch (MessagingException e) {
+			throw new QuestaException(e.getMessage(), ConstantUtil.EMAIL_SERVICE_FAILURE_CODE);
+		}
+	}
+	
+	public void sendBccNotification(String[] email, String subject, String body) {
+		try {
+			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+			helper.setText(body, true); 
+			helper.setBcc(email);
 			helper.setSubject(subject);
 			helper.setFrom(fromEmail);
 			javaMailSender.send(mimeMessage);

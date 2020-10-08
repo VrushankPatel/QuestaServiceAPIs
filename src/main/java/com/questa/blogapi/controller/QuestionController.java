@@ -68,6 +68,12 @@ public class QuestionController {
 		return questionService.findAllQuestions(userId);
 	}
 	
+	@RequestMapping(value = ConstantUtil.FIND_ALL_QUESTIONS_FOR_ADMIN_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public List<Question> findAllQuestionsForAdmin(@PathVariable Integer userId) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.FIND_ALL_QUESTIONS_FOR_ADMIN_ENDPOINT +" endpoint");
+		return questionService.findAllQuestionsForAdmin(userId);
+	}
+	
 	@RequestMapping(value = ConstantUtil.FIND_ALL_BY_FOLLOWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public List<Question> findAllByFollower(@PathVariable Integer userId) throws QuestaException {
 		log.info("Calling "+ ConstantUtil.FIND_ALL_BY_FOLLOWER_ENDPOINT +" endpoint");
