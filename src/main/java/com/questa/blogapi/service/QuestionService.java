@@ -132,7 +132,7 @@ public class QuestionService {
 				questionIdList.add(ans.getQuestionId());
 			});
 		});
-		questionRepository.findDistinctByQuestionId(questionIdList).forEach(que -> {
+		questionRepository.findDistinctByQuestionIdIn(questionIdList).forEach(que -> {
 			questionList.add(que);
 		});
 		return fetchAnswersAndFeedbacks(questionList, userId);
