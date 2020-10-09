@@ -31,6 +31,7 @@ import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.AuthenticationRequest;
 import com.questa.blogapi.model.AuthenticationResponse;
 import com.questa.blogapi.model.QuestaResponse;
+import com.questa.blogapi.model.Role;
 import com.questa.blogapi.model.User;
 import com.questa.blogapi.repository.UserRepository;
 import com.questa.blogapi.util.ConstantUtil;
@@ -95,6 +96,7 @@ public class UserService implements UserDetailsService {
 		Optional<User> userExist = userRepository.findByEmail(user.getEmail());
 		if (userExist.isPresent()) throw new QuestaException(ConstantUtil.EMAIL_ERROR_MESSAGE,ConstantUtil.EMAIL_ERROR_CODE);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setRole(Role.USER); // Back-end api will only allow to create user with "USER" role
 		userRepository.save(user);
 		log.info("User created ["+user.toString()+"]");
 		String text = "<p>Hi "+user.getNickName() + "!</p><p>Welcome to the Questa.</p><p>Login <a href=\""+ServletUriComponentsBuilder.fromCurrentContextPath().toUriString()+"/Signin\">Here</a>.</p><p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
