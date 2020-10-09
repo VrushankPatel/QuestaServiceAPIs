@@ -13,6 +13,7 @@ public class ConstantUtil {
 	//QuestionController end-points
 	public static final String CREATE_QUESTION_ENDPOINT = "/createquestion";
 	public static final String CREATE_ANSWER_ENDPOINT = "/createanswer";
+	public static final String DELETE_ANSWER_ENDPOINT = "/deleteanswer";
 	public static final String CREATE_FOLLWER_ENDPOINT = "/createfollower";
 	public static final String CREATE_ANSWER_FEEDBACK_ENDPOINT = "/createfeedback";
 	public static final String CREATE_QUESTION_FEEDBACK_ENDPOINT = "/createquestionfeedback";
@@ -49,6 +50,7 @@ public class ConstantUtil {
 	public static final String USER_PROFILE_NOT_FOUND_MESSAGE = "User profile not found...";
 	public static final String QUESTION_CREATED_MESSAGE = "Question successfully created...";
 	public static final String ANSWER_CREATED_MESSAGE = "Answer successfully created...";
+	public static final String ANSWER_DELETED_MESSAGE = "Answer deleted successfully created...";
 	public static final String USER_FEEDBACK_CREATED_MESSAGE = "User feedback successfully created...";
 	public static final String FOLLOWER_CREATED_MESSAGE = "Follower successfully created...";
 	public static final String FOLLOWER_DELETED_MESSAGE = "Follower successfully deleted...";

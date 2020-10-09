@@ -91,6 +91,18 @@ public class QuestionService {
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
 	
+	public ResponseEntity<Object> deleteAnswer(Integer answerId) throws QuestaException {
+		answerRepository.findByAnswerId(answerId).ifPresent(ans -> {
+			answerFeedbackRepository.findByAnswerIdAndUserId(ans.getAnswerId(), ans.getUserId()).ifPresent(ansfdback -> {
+				log.info("deleteing answer feedback details :: " + ansfdback.toString());
+				answerFeedbackRepository.delete(ansfdback);
+			});
+			log.info("deleteing answer details :: " + ans.toString());
+			answerRepository.delete(ans);
+		});		
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_DELETED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+	}
+	
 	public ResponseEntity<Object> createFollower(Follower follower) throws QuestaException {
 		log.info(follower.toString());
 		followerRepository.findByQuestionIdAndUserId(follower.getQuestionId(), follower.getUserId()).ifPresent(flwer -> follower.setFolllowerId(flwer.getFolllowerId()));

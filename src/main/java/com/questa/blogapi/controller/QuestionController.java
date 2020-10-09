@@ -40,8 +40,13 @@ public class QuestionController {
 	@RequestMapping(value = ConstantUtil.CREATE_ANSWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
 	public ResponseEntity<Object> createAnswer(@RequestBody Answer answer) throws QuestaException {
 		log.info("Calling "+ ConstantUtil.CREATE_ANSWER_ENDPOINT +" endpoint");
-		
 		return questionService.createAnswer(answer);
+	}
+	
+	@RequestMapping(value = ConstantUtil.DELETE_ANSWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public ResponseEntity<Object> deleteAnswer(@RequestBody Answer answer) throws QuestaException {
+		log.info("Calling "+ ConstantUtil.DELETE_ANSWER_ENDPOINT +" endpoint");
+		return questionService.deleteAnswer(answer.getAnswerId());
 	}
 	
 	@RequestMapping(value = ConstantUtil.CREATE_FOLLWER_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
