@@ -183,7 +183,7 @@ public class QuestionService {
 	
 	private List<Question> fetchAnswersAndFeedbacks(List<Question> questionList, Integer userId) {
 		questionList.stream().forEach(que -> {
-										userRepository.findByUserId(que.getQuestionId()).ifPresent(usr -> que.setNickName(usr.getNickName()));
+										userRepository.findByUserId(que.getUserId()).ifPresent(usr -> que.setNickName(usr.getNickName()));
 										fetchAnswersAndFeedbacksByQuestion(que, userId);
 									});
 		return questionList;
@@ -203,7 +203,7 @@ public class QuestionService {
 	}
 	
 	private Answer fetchAnswerDetails(Answer answer, Integer userId) {
-		userRepository.findByUserId(answer.getQuestionId()).ifPresent(usr -> answer.setNickName(usr.getNickName()));
+		userRepository.findByUserId(answer.getUserId()).ifPresent(usr -> answer.setNickName(usr.getNickName()));
 		answer.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(answer.getAnswerId(), true));
 		answer.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
 		answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(),userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
