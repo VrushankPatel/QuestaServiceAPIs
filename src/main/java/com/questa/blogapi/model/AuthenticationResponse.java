@@ -6,12 +6,14 @@ public class AuthenticationResponse {
 	private final Integer code;
 	private final Boolean status;
 	private final Integer userId;
+	private final Role role;
 
-	public AuthenticationResponse(String token, Integer code, Boolean status, Integer userId) {
+	public AuthenticationResponse(String token, Integer code, Boolean status, Integer userId, Role role) {
 		this.token = token;
 		this.code = code;
 		this.status = status;
 		this.userId = userId;
+		this.role = role;
 	}
 
 	public String getToken() {
@@ -30,10 +32,13 @@ public class AuthenticationResponse {
 		return userId;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
 	@Override
 	public String toString() {
 		return "AuthenticationResponse [token=" + token + ", code=" + code + ", status=" + status + ", userId=" + userId
-				+ "]";
-	}
-
+				+ ", role=" + role + "]";
+	}	
 }

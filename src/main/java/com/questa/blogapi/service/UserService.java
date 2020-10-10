@@ -89,7 +89,7 @@ public class UserService implements UserDetailsService {
 
 		UserDetails userDetails = loadUserByUsername(authenticationRequest.getUsername());
 		Optional<User> user = userRepository.findByEmail(authenticationRequest.getUsername());
-		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true,user.get().getUserId());
+		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true,user.get().getUserId(),user.get().getRole());
 	}
 
 	public ResponseEntity<Object> createUser(User user) throws QuestaException {
