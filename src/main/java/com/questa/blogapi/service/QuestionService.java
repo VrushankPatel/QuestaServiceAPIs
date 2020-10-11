@@ -126,7 +126,13 @@ public class QuestionService {
 	public ResponseEntity<Object> createAnswerFeedback(AnswerFeedback answerFeedback) {
 		log.info(answerFeedback.toString());
 		answerFeedbackRepository.findByAnswerIdAndUserId(answerFeedback.getAnswerId(), answerFeedback.getUserId())
-					.ifPresent(fback -> answerFeedback.setFeedbackId(fback.getFeedbackId()));
+					.ifPresent(fback -> {
+						answerFeedback.setFeedbackId(fback.getFeedbackId());
+						if(answerFeedback.getReportDesc()!=null && !answerFeedback.getReportDesc().isEmpty()) {
+							answerFeedback.setLiked(fback.getLiked());
+							answerFeedback.setUnliked(fback.getUnliked());
+						}
+					});
 		answerFeedbackRepository.save(answerFeedback);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
 	}
