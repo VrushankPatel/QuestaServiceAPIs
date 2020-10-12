@@ -151,9 +151,25 @@ public class QuestionService {
 			});
 		});
 		questionRepository.findDistinctByQuestionIdInOrderByCreateDateDesc(questionIdList).forEach(que -> {
+			List<Answer> answerList = new ArrayList<>();
+			answerRepository.findByQuestionIdOrderByCreateDateDesc(que.getQuestionId()).stream().forEach(ans -> {
+				if (answerFeedbackRepository.countByAnswerIdAndReportDescNotNull(ans.getAnswerId())>0) {
+					log.info("count :: " + answerFeedbackRepository.countByAnswerIdAndReportDescNotNull(ans.getAnswerId()));
+					userRepository.findByUserId(ans.getUserId()).ifPresent(usr -> ans.setNickName(usr.getNickName()));
+					ans.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(ans.getAnswerId(), true));
+					ans.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(ans.getAnswerId(), true));
+					answerList.add(ans);
+				}
+			});
+			userRepository.findByUserId(que.getUserId()).ifPresent(usr -> que.setNickName(usr.getNickName()));
+			que.setAnswerList(answerList);
+			que.setNoOfLikes(questionFeedbackRepository.countByQuestionIdAndLiked(que.getQuestionId(), true));
+			que.setNoOfDislikes(questionFeedbackRepository.countByQuestionIdAndLiked(que.getQuestionId(), true));
+			que.setNoOfAnswers(answerRepository.countByQuestionId(que.getQuestionId()));
+			que.setNoOfFollowers(followerRepository.countByQuestionId(que.getQuestionId()));
 			questionList.add(que);
 		});
-		return fetchAnswersAndFeedbacks(questionList, userId);
+		return questionList;
 	}
 
 	public List<Question> findAllQuestionsByUser(Integer userId) {
