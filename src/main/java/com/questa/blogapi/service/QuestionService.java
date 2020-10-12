@@ -145,12 +145,12 @@ public class QuestionService {
 	public List<Question> findAllQuestionsForAdmin(Integer userId) {
 		List<Question> questionList = new ArrayList<>();
 		List<Integer> questionIdList = new ArrayList<>();
-		answerFeedbackRepository.findByUserIdAndReportDescNotNull(userId).ifPresent(ansFdBk ->{
+		answerFeedbackRepository.findByReportDescNotNull().forEach(ansFdBk ->{
 			answerRepository.findByAnswerId(ansFdBk.getAnswerId()).ifPresent(ans ->{
 				questionIdList.add(ans.getQuestionId());
 			});
 		});
-		questionRepository.findDistinctByQuestionIdIn(questionIdList).forEach(que -> {
+		questionRepository.findDistinctByQuestionIdInOrderByCreateDateDesc(questionIdList).forEach(que -> {
 			questionList.add(que);
 		});
 		return fetchAnswersAndFeedbacks(questionList, userId);
