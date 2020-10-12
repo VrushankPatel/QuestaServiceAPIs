@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name = "ANSWERFEEDBACK")
@@ -33,6 +36,10 @@ public class AnswerFeedback {
 	
 	@Column(name = "REPORT_DESC", length = 1000)
 	private String reportDesc;
+	
+	@JsonInclude()
+	@Transient
+	private String nickName;
 
 	public Integer getFeedbackId() {
 		return feedbackId;
@@ -83,10 +90,17 @@ public class AnswerFeedback {
 		this.reportDesc = reportDesc;
 	}
 
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
 	@Override
 	public String toString() {
-		return "AnswerFeedback [feedbackId=" + feedbackId + ", answerId=" + answerId 
-				+ ", userId=" + userId + ", liked=" + liked + ", unliked=" + unliked + ", reportDesc=" + reportDesc
-				+ "]";
+		return "AnswerFeedback [feedbackId=" + feedbackId + ", answerId=" + answerId + ", userId=" + userId + ", liked="
+				+ liked + ", unliked=" + unliked + ", reportDesc=" + reportDesc + ", nickName=" + nickName + "]";
 	}	
 }

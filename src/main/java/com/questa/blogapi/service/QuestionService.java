@@ -153,11 +153,13 @@ public class QuestionService {
 		questionRepository.findDistinctByQuestionIdInOrderByCreateDateDesc(questionIdList).forEach(que -> {
 			List<Answer> answerList = new ArrayList<>();
 			answerRepository.findByQuestionIdOrderByCreateDateDesc(que.getQuestionId()).stream().forEach(ans -> {
-				if (answerFeedbackRepository.countByAnswerIdAndReportDescNotNull(ans.getAnswerId())>0) {
-					log.info("count :: " + answerFeedbackRepository.countByAnswerIdAndReportDescNotNull(ans.getAnswerId()));
+				List<AnswerFeedback> ansFbackList = answerFeedbackRepository.findByAnswerIdAndReportDescNotNull(ans.getAnswerId());
+				if (ansFbackList!=null && ansFbackList.size() > 0) {
 					userRepository.findByUserId(ans.getUserId()).ifPresent(usr -> ans.setNickName(usr.getNickName()));
 					ans.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(ans.getAnswerId(), true));
 					ans.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(ans.getAnswerId(), true));
+					ansFbackList.forEach(ansfc -> userRepository.findByUserId(ansfc.getUserId()).ifPresent(usr -> ansfc.setNickName(usr.getNickName())));
+					ans.setAnswerFeedbackList(ansFbackList);
 					answerList.add(ans);
 				}
 			});

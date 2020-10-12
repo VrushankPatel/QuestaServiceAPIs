@@ -11,7 +11,8 @@ public interface AnswerFeedbackRepository extends CrudRepository<AnswerFeedback,
 
 	Optional<AnswerFeedback> findByAnswerIdAndUserId(Integer answerId, Integer userId);
 	List<AnswerFeedback> findByReportDescNotNull();
-	Integer countByAnswerIdAndReportDescNotNull(Integer answerId);
+	List<AnswerFeedback> findByAnswerIdAndReportDescNotNull(Integer answerId);
+	//Integer countByAnswerIdAndReportDescNotNull(Integer answerId);
 	Integer countByAnswerIdAndLiked(Integer answerId, Boolean liked);
 	Integer countByAnswerIdAndUnliked(Integer answerId, Boolean unliked);
 }

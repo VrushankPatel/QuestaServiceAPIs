@@ -2,6 +2,7 @@ package com.questa.blogapi.model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,6 +49,11 @@ public class Answer {
 	@JsonInclude()
 	@Transient
 	private AnswerFeedback answerFeedbackByCurrentUser;
+	
+	@JsonInclude()
+	@Transient
+	private List<AnswerFeedback> answerFeedbackList;
+	
 	
 	@JsonInclude()
 	@Transient
@@ -137,6 +143,14 @@ public class Answer {
 		this.nickName = nickName;
 	}
 	
+	public List<AnswerFeedback> getAnswerFeedbackList() {
+		return answerFeedbackList;
+	}
+
+	public void setAnswerFeedbackList(List<AnswerFeedback> answerFeedbackList) {
+		this.answerFeedbackList = answerFeedbackList;
+	}
+
 	@Override
 	public String toString() {
 		return "Answer [answerId=" + answerId + ", questionId=" + questionId + ", userId=" + userId + ", answerDesc="
