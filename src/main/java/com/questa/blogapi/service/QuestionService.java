@@ -131,6 +131,8 @@ public class QuestionService {
 						if(answerFeedback.getReportDesc()!=null && !answerFeedback.getReportDesc().isEmpty()) {
 							answerFeedback.setLiked(fback.getLiked());
 							answerFeedback.setUnliked(fback.getUnliked());
+						}else {
+							answerFeedback.setReportDesc(fback.getReportDesc());
 						}
 					});
 		answerFeedbackRepository.save(answerFeedback);
