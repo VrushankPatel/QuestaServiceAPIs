@@ -196,7 +196,7 @@ public class QuestionService {
 	
 	public List<Question> findAllBySubjectTopic(QuestionSearch questionSearch) {
 		log.info("findAllBySubjectTopic ::" + questionSearch.toString());
-		List<Question> questionList = fetchAnswersAndFeedbacks(questionRepository.findBySubjectAndTopicIgnoreCaseContainingAndQuestionDescIgnoreCaseContainingOrderByCreateDateDesc(questionSearch.getSubject(), questionSearch.getTopic(), questionSearch.getQuestionDesc()), questionSearch.getUserId());
+		List<Question> questionList = fetchAnswersAndFeedbacks(questionRepository.findBySubjectIgnoreCaseContainingAndTopicIgnoreCaseContainingAndQuestionDescIgnoreCaseContainingOrderByCreateDateDesc(questionSearch.getSubject(), questionSearch.getTopic(), questionSearch.getQuestionDesc()), questionSearch.getUserId());
 		List<Question> questionWithAnsList = new ArrayList<>();
 		questionList.forEach(que -> {
 			if(que.getNoOfAnswers()>0) questionWithAnsList.add(que);
