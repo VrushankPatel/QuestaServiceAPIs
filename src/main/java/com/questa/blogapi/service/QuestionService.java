@@ -19,6 +19,7 @@ import com.questa.blogapi.model.Follower;
 import com.questa.blogapi.model.QuestaResponse;
 import com.questa.blogapi.model.Question;
 import com.questa.blogapi.model.QuestionFeedback;
+import com.questa.blogapi.model.QuestionSearch;
 import com.questa.blogapi.model.User;
 import com.questa.blogapi.repository.AnswerFeedbackRepository;
 import com.questa.blogapi.repository.AnswerRepository;
@@ -193,9 +194,9 @@ public class QuestionService {
 		return fetchAnswersAndFeedbacks(questionList, userId);
 	}
 	
-	public List<Question> findAllBySubjectTopic(Question question) {
-		log.info("findAllBySubjectTopic ::" + question.toString());
-		List<Question> questionList = fetchAnswersAndFeedbacks(questionRepository.findBySubjectAndTopicIgnoreCaseContainingAndQuestionDescIgnoreCaseContainingOrderByCreateDateDesc(question.getSubject(), question.getTopic(), question.getQuestionDesc()), question.getUserId());
+	public List<Question> findAllBySubjectTopic(QuestionSearch questionSearch) {
+		log.info("findAllBySubjectTopic ::" + questionSearch.toString());
+		List<Question> questionList = fetchAnswersAndFeedbacks(questionRepository.findBySubjectAndTopicIgnoreCaseContainingAndQuestionDescIgnoreCaseContainingOrderByCreateDateDesc(questionSearch.getSubject(), questionSearch.getTopic(), questionSearch.getQuestionDesc()), questionSearch.getUserId());
 		List<Question> questionWithAnsList = new ArrayList<>();
 		questionList.forEach(que -> {
 			if(que.getNoOfAnswers()>0) questionWithAnsList.add(que);
