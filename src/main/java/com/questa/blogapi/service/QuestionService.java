@@ -68,7 +68,7 @@ public class QuestionService {
 		follower.setUserId(question.getUserId());
 		follower.setFollowed(true);
 		followerRepository.save(follower);
-		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.QUESTION_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.QUESTION_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> createAnswer(Answer answer) throws QuestaException {
@@ -91,8 +91,7 @@ public class QuestionService {
 			notificationService.sendBccNotification(emailIds.stream().toArray(String[]::new), "Profile updated in Questa", text);
 		}
 		
-		//return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
-		return new ResponseEntity<>(fetchUserProgressLevel(answer.getUserId()), HttpStatus.OK);
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,fetchUserProgressLevel(answer.getUserId())), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> deleteAnswer(Integer answerId) throws QuestaException {
@@ -104,7 +103,7 @@ public class QuestionService {
 			log.info("deleteing answer details :: " + ans.toString());
 			answerRepository.delete(ans);
 		});		
-		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_DELETED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_DELETED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> createFollower(Follower follower) throws QuestaException {
@@ -112,10 +111,10 @@ public class QuestionService {
 		followerRepository.findByQuestionIdAndUserId(follower.getQuestionId(), follower.getUserId()).ifPresent(flwer -> follower.setFolllowerId(flwer.getFolllowerId()));
 		if(follower.getFollowed()) {
 			followerRepository.save(follower);
-			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 		}else {
 			followerRepository.delete(follower);
-			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_DELETED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.FOLLOWER_DELETED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 		}
 	}
 	
@@ -124,7 +123,7 @@ public class QuestionService {
 		questionFeedbackRepository.findByQuestionIdAndUserId(questionFeedback.getQuestionId(), questionFeedback.getUserId())
 					.ifPresent(qback -> questionFeedback.setFeedbackId(qback.getFeedbackId()));
 		questionFeedbackRepository.save(questionFeedback);
-		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> createAnswerFeedback(AnswerFeedback answerFeedback) {
@@ -140,7 +139,7 @@ public class QuestionService {
 						}
 					});
 		answerFeedbackRepository.save(answerFeedback);
-		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 	}
 	
 	public List<Question> findAllQuestions(Integer userId) {

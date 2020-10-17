@@ -4,12 +4,14 @@ public class QuestaResponse {
 	private final String message;
 	private final Integer code;
 	private final Boolean status;
+	private final UserProgressLevel userProgressLevel;
 	
-	public QuestaResponse(String message, Integer code, Boolean status) {
+	public QuestaResponse(String message, Integer code, Boolean status, UserProgressLevel userProgressLevel) {
 		super();
 		this.message = message;
 		this.code = code;
 		this.status = status;
+		this.userProgressLevel = userProgressLevel;
 	}
 
 	public String getMessage() {
@@ -24,4 +26,8 @@ public class QuestaResponse {
 		return status;
 	}
 
+	public UserProgressLevel getUserProgressLevel() {
+		return userProgressLevel;
+	}
+	
 }

@@ -11,7 +11,7 @@ public class QuestaException extends RuntimeException {
 	private final QuestaResponse exceptionResponse;
 	
 	public QuestaException(String errorMessage, Integer ErrorCode) {
-		exceptionResponse = new QuestaResponse(errorMessage, ErrorCode,false); 
+		exceptionResponse = new QuestaResponse(errorMessage, ErrorCode,false,null); 
 	}
 
 	public QuestaResponse getExceptionResponse() {
