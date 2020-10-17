@@ -1,7 +1,6 @@
 package com.questa.blogapi.model;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -36,7 +35,7 @@ public class Answer {
 	private String answerDesc;
 	
 	@Column(name="TIME_TAKEN", nullable = false)
-	private Time timeTaken;
+	private Long timeTaken;
 
 	@Column(name = "CREATE_DATE", nullable = false)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -103,11 +102,11 @@ public class Answer {
 		this.createDate = createDate;
 	}
 	
-	public Time getTimeTaken() {
+	public Long getTimeTaken() {
 		return timeTaken;
 	}
 
-	public void setTimeTaken(Time timeTaken) {
+	public void setTimeTaken(Long timeTaken) {
 		this.timeTaken = timeTaken;
 	}
 
