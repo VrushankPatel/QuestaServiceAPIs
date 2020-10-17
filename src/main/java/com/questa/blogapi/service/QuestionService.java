@@ -2,6 +2,7 @@ package com.questa.blogapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import com.questa.blogapi.model.Question;
 import com.questa.blogapi.model.QuestionFeedback;
 import com.questa.blogapi.model.QuestionSearch;
 import com.questa.blogapi.model.User;
+import com.questa.blogapi.model.UserProgressLevel;
 import com.questa.blogapi.repository.AnswerFeedbackRepository;
 import com.questa.blogapi.repository.AnswerRepository;
 import com.questa.blogapi.repository.FollowerRepository;
@@ -89,7 +91,8 @@ public class QuestionService {
 			notificationService.sendBccNotification(emailIds.stream().toArray(String[]::new), "Profile updated in Questa", text);
 		}
 		
-		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		//return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true), HttpStatus.OK);
+		return new ResponseEntity<>(fetchUserProgressLevel(answer.getUserId()), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Object> deleteAnswer(Integer answerId) throws QuestaException {
@@ -236,5 +239,17 @@ public class QuestionService {
 		answer.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
 		answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(),userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
 		return answer;
+	}
+	
+	public UserProgressLevel fetchUserProgressLevel(Integer userId) {
+		UserProgressLevel progressLevel = new UserProgressLevel();
+		
+		Long totalTime = Optional.ofNullable(answerRepository.sumTimeTakenByQuestionId(userId)).orElse(0L);
+		log.info("totaltime ::"+totalTime);
+		
+		progressLevel.setTotalLevelTime(ConstantUtil.USER_TOTAL_TIME_PER_LEVEL);
+		progressLevel.setLevel((int) (totalTime/ConstantUtil.USER_TOTAL_TIME_PER_LEVEL+1));
+		progressLevel.setCurrentLevelTime(totalTime%ConstantUtil.USER_TOTAL_TIME_PER_LEVEL);
+		return progressLevel;
 	}
 }

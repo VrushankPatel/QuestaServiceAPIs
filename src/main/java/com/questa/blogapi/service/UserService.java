@@ -33,6 +33,7 @@ import com.questa.blogapi.model.AuthenticationResponse;
 import com.questa.blogapi.model.QuestaResponse;
 import com.questa.blogapi.model.Role;
 import com.questa.blogapi.model.User;
+import com.questa.blogapi.model.UserProgressLevel;
 import com.questa.blogapi.repository.UserRepository;
 import com.questa.blogapi.util.ConstantUtil;
 
@@ -89,7 +90,8 @@ public class UserService implements UserDetailsService {
 
 		UserDetails userDetails = loadUserByUsername(authenticationRequest.getUsername());
 		Optional<User> user = userRepository.findByEmail(authenticationRequest.getUsername());
-		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true,user.get().getUserId(),user.get().getRole());
+		UserProgressLevel userProgressLevel = questionService.fetchUserProgressLevel(user.get().getUserId());
+		return new AuthenticationResponse(jwtUtil.generateToken(userDetails),ConstantUtil.SUCCESS_CODE, true,user.get().getUserId(),user.get().getRole(), userProgressLevel);
 	}
 
 	public ResponseEntity<Object> createUser(User user) throws QuestaException {

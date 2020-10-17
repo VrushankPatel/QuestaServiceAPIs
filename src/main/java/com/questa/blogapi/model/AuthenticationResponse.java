@@ -7,13 +7,15 @@ public class AuthenticationResponse {
 	private final Boolean status;
 	private final Integer userId;
 	private final Role role;
+	private final UserProgressLevel userProgressLevel;
 
-	public AuthenticationResponse(String token, Integer code, Boolean status, Integer userId, Role role) {
+	public AuthenticationResponse(String token, Integer code, Boolean status, Integer userId, Role role, UserProgressLevel userProgressLevel) {
 		this.token = token;
 		this.code = code;
 		this.status = status;
 		this.userId = userId;
 		this.role = role;
+		this.userProgressLevel = userProgressLevel;
 	}
 
 	public String getToken() {
@@ -34,6 +36,10 @@ public class AuthenticationResponse {
 
 	public Role getRole() {
 		return role;
+	}
+
+	public UserProgressLevel getUserProgressLevel() {
+		return userProgressLevel;
 	}
 
 	@Override

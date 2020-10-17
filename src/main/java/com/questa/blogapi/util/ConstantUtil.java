@@ -2,6 +2,8 @@ package com.questa.blogapi.util;
 
 public class ConstantUtil {
 	
+	public static final Long USER_TOTAL_TIME_PER_LEVEL = 1800L; // 30 mins each progress level
+	
 	//UserController end-points
 	public static final String LOGIN_ENDPOINT = "/login";
 	public static final String SIGNUP_ENDPOINT = "/signup";
