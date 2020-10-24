@@ -96,7 +96,7 @@ public class QuestionService {
 	
 	public ResponseEntity<Object> deleteAnswer(Integer answerId) throws QuestaException {
 		answerRepository.findByAnswerId(answerId).ifPresent(ans -> {
-			answerFeedbackRepository.findByAnswerIdAndUserId(ans.getAnswerId(), ans.getUserId()).ifPresent(ansfdback -> {
+			answerFeedbackRepository.findByAnswerIdAndUserId(ans.getAnswerId(), ans.getUserId()).forEach(ansfdback -> {
 				log.info("deleteing answer feedback details :: " + ansfdback.toString());
 				answerFeedbackRepository.delete(ansfdback);
 			});
@@ -121,7 +121,7 @@ public class QuestionService {
 	public ResponseEntity<Object> createQuestionFeedback(QuestionFeedback questionFeedback) {
 		log.info(questionFeedback.toString());
 		questionFeedbackRepository.findByQuestionIdAndUserId(questionFeedback.getQuestionId(), questionFeedback.getUserId())
-					.ifPresent(qback -> questionFeedback.setFeedbackId(qback.getFeedbackId()));
+					.forEach(qback -> questionFeedback.setFeedbackId(qback.getFeedbackId()));
 		questionFeedbackRepository.save(questionFeedback);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_FEEDBACK_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 	}
@@ -129,7 +129,7 @@ public class QuestionService {
 	public ResponseEntity<Object> createAnswerFeedback(AnswerFeedback answerFeedback) {
 		log.info(answerFeedback.toString());
 		answerFeedbackRepository.findByAnswerIdAndUserId(answerFeedback.getAnswerId(), answerFeedback.getUserId())
-					.ifPresent(fback -> {
+					.forEach(fback -> {
 						answerFeedback.setFeedbackId(fback.getFeedbackId());
 						if(answerFeedback.getReportDesc()!=null && !answerFeedback.getReportDesc().isEmpty()) {
 							answerFeedback.setLiked(fback.getLiked());
@@ -223,7 +223,14 @@ public class QuestionService {
 		List<Answer> answerList = answerRepository.findByQuestionIdOrderByCreateDateDesc(question.getQuestionId());
 		answerList.stream().forEach(ans -> fetchAnswerDetails(ans, userId));
 		question.setAnswerList(answerList);
-		questionFeedbackRepository.findByQuestionIdAndUserId(question.getQuestionId(), userId).ifPresent(quefb -> question.setQuestionFeedbackByCurrentUser(quefb));
+		List<QuestionFeedback> queFeedbkList =  questionFeedbackRepository.findByQuestionIdAndUserId(question.getQuestionId(), userId);
+		if(queFeedbkList!=null && !queFeedbkList.isEmpty()) {
+			question.setQuestionFeedbackByCurrentUser(queFeedbkList.stream().findFirst().get());
+			queFeedbkList.stream().skip(1).forEach(dupl -> {
+				log.info("Deleting duplicate questionfeedback ::" + dupl.toString());
+				questionFeedbackRepository.delete(dupl);
+			});
+		}
 		question.setNoOfLikes(questionFeedbackRepository.countByQuestionIdAndLiked(question.getQuestionId(), true));
 		question.setNoOfDislikes(questionFeedbackRepository.countByQuestionIdAndLiked(question.getQuestionId(), true));
 		question.setNoOfAnswers(answerRepository.countByQuestionId(question.getQuestionId()));
@@ -236,7 +243,14 @@ public class QuestionService {
 		userRepository.findByUserId(answer.getUserId()).ifPresent(usr -> answer.setNickName(usr.getNickName()));
 		answer.setNoOfDislikes(answerFeedbackRepository.countByAnswerIdAndUnliked(answer.getAnswerId(), true));
 		answer.setNoOfLikes(answerFeedbackRepository.countByAnswerIdAndLiked(answer.getAnswerId(), true));
-		answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(),userId).ifPresent(feedback -> answer.setAnswerFeedbackByCurrentUser(feedback));
+		List<AnswerFeedback> ansFeedbkList =  answerFeedbackRepository.findByAnswerIdAndUserId(answer.getAnswerId(),userId);
+		if(ansFeedbkList!=null && !ansFeedbkList.isEmpty()) {
+			answer.setAnswerFeedbackByCurrentUser(ansFeedbkList.stream().findFirst().get());
+			ansFeedbkList.stream().skip(1).forEach(dupl -> {
+				log.info("Deleting duplicate answerfeedback ::" + dupl.toString());
+				answerFeedbackRepository.delete(dupl);
+			});
+		}
 		return answer;
 	}
 	

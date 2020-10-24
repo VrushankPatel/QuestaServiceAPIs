@@ -1,7 +1,6 @@
 package com.questa.blogapi.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -9,7 +8,7 @@ import com.questa.blogapi.model.AnswerFeedback;
 
 public interface AnswerFeedbackRepository extends CrudRepository<AnswerFeedback, Integer>{
 
-	Optional<AnswerFeedback> findByAnswerIdAndUserId(Integer answerId, Integer userId);
+	List<AnswerFeedback> findByAnswerIdAndUserId(Integer answerId, Integer userId);
 	List<AnswerFeedback> findByReportDescNotNull();
 	List<AnswerFeedback> findByAnswerIdAndReportDescNotNull(Integer answerId);
 	//Integer countByAnswerIdAndReportDescNotNull(Integer answerId);
