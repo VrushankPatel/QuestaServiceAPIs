@@ -4,7 +4,8 @@ public class UserProgressLevel {
 
 	private Integer level;
 	private Long currentLevelTime;
-	private Long TotalLevelTime;
+	private Long currentTotalLevelTime;
+	private Long totalSpendTimeByUser;
 	public Integer getLevel() {
 		return level;
 	}
@@ -17,10 +18,23 @@ public class UserProgressLevel {
 	public void setCurrentLevelTime(Long currentLevelTime) {
 		this.currentLevelTime = currentLevelTime;
 	}
-	public Long getTotalLevelTime() {
-		return TotalLevelTime;
+	public Long getCurrentTotalLevelTime() {
+		return currentTotalLevelTime;
 	}
-	public void setTotalLevelTime(Long totalLevelTime) {
-		TotalLevelTime = totalLevelTime;
+	public void setCurrentTotalLevelTime(Long currentTotalLevelTime) {
+		this.currentTotalLevelTime = currentTotalLevelTime;
 	}
+	public Long getTotalSpendTimeByUser() {
+		return totalSpendTimeByUser;
+	}
+	public void setTotalSpendTimeByUser(Long totalSpendTimeByUser) {
+		this.totalSpendTimeByUser = totalSpendTimeByUser;
+	}
+	@Override
+	public String toString() {
+		return "UserProgressLevel [level=" + level + ", currentLevelTime=" + currentLevelTime
+				+ ", currentTotalLevelTime=" + currentTotalLevelTime + ", totalSpendTimeByUser=" + totalSpendTimeByUser
+				+ "]";
+	}
+	
 }

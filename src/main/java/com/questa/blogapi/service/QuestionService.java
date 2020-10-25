@@ -257,12 +257,26 @@ public class QuestionService {
 	public UserProgressLevel fetchUserProgressLevel(Integer userId) {
 		UserProgressLevel progressLevel = new UserProgressLevel();
 		
-		Long totalTime = Optional.ofNullable(answerRepository.sumTimeTakenByQuestionId(userId)).orElse(0L);
-		log.info("totaltime ::"+totalTime);
-		
-		progressLevel.setTotalLevelTime(ConstantUtil.USER_TOTAL_TIME_PER_LEVEL);
-		progressLevel.setLevel((int) (totalTime/ConstantUtil.USER_TOTAL_TIME_PER_LEVEL+1));
-		progressLevel.setCurrentLevelTime(totalTime%ConstantUtil.USER_TOTAL_TIME_PER_LEVEL);
+		long totalSpendTimeByUser = Optional.ofNullable(answerRepository.sumTimeTakenByQuestionId(userId)).orElse(0L);
+		int currentLevel =0;
+		long currentTotalLevelTime = ConstantUtil.USER_TOTAL_TIME_FOR_FIRST_LEVEL ;
+		long currentLevelTime = totalSpendTimeByUser;
+		long totalLevelTime = currentTotalLevelTime;
+		progressLevel.setLevel(currentLevel+1);
+		progressLevel.setCurrentLevelTime(currentLevelTime);
+		progressLevel.setCurrentTotalLevelTime(currentTotalLevelTime);
+		progressLevel.setTotalSpendTimeByUser(totalSpendTimeByUser);
+		log.info(progressLevel.toString());
+		for(;currentLevelTime>currentTotalLevelTime;currentLevel++) {
+			currentLevelTime = currentLevelTime - (ConstantUtil.USER_TOTAL_TIME_FOR_FIRST_LEVEL + (currentLevel*ConstantUtil.USER_INCREASE_TIME_FROM_SECOND_LEVEL));
+			totalLevelTime = totalLevelTime + currentTotalLevelTime;
+			currentTotalLevelTime = (ConstantUtil.USER_TOTAL_TIME_FOR_FIRST_LEVEL + (currentLevel*ConstantUtil.USER_INCREASE_TIME_FROM_SECOND_LEVEL));
+			progressLevel.setLevel(currentLevel+2);
+			progressLevel.setCurrentLevelTime(currentLevelTime);
+			progressLevel.setCurrentTotalLevelTime(currentTotalLevelTime);
+			progressLevel.setTotalSpendTimeByUser(totalSpendTimeByUser);
+			log.info(progressLevel.toString());
+		}
 		return progressLevel;
 	}
 }
