@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.questa.blogapi.exception.QuestaException;
 import com.questa.blogapi.model.Answer;
@@ -58,6 +57,9 @@ public class QuestionService {
 	@Value("${spring.mail.username}")
 	private String fromEmail;
 	
+	@Value("${login.url}")
+	private String loginUrl;
+	
 	private static final Logger log = LoggerFactory.getLogger(QuestionService.class);
 
 	public ResponseEntity<Object> createQuestion(Question question) throws QuestaException {
@@ -86,9 +88,9 @@ public class QuestionService {
 			String text = "<p>Hi There!</p><p>Your question has been commented by "+userRepository.findByUserId(answer.getUserId()).orElse(new User()).getNickName()+" as below:</p>"
 					+ "<p>Question: "+questionRepository.findByQuestionId(answer.getQuestionId()).orElse(new Question()).getQuestionDesc()+"</p>"
 					+ "<p>Answer: "+answer.getAnswerDesc()+"</p>"
-					+ "<p>Login <a href=\""+ServletUriComponentsBuilder.fromCurrentContextPath().toUriString()+"/Signin\">Here</a> to reply on the comment.</p>"
+					+ "<p>Login <a href=\""+loginUrl+"\">Here</a> to reply on the comment.</p>"
 					+ "<p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
-			notificationService.sendBccNotification(emailIds.stream().toArray(String[]::new), "Profile updated in Questa", text);
+			notificationService.sendBccNotification(emailIds.stream().toArray(String[]::new), "Your question has been answered in Questa", text);
 		}
 		
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,fetchUserProgressLevel(answer.getUserId())), HttpStatus.OK);
