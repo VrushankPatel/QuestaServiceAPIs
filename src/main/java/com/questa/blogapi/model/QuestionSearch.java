@@ -6,7 +6,8 @@ public class QuestionSearch {
 	private String subject;
 	private String topic;
 	private String questionDesc;
-
+	private String searchType;
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -39,10 +40,20 @@ public class QuestionSearch {
 		this.questionDesc = questionDesc;
 	}
 
+	public String getSearchType() {
+		return searchType;
+	}
+
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+
 	@Override
 	public String toString() {
 		return "QuestionSearch [userId=" + userId + ", subject=" + subject + ", topic=" + topic + ", questionDesc="
-				+ questionDesc + "]";
+				+ questionDesc + ", searchType=" + searchType + "]";
 	}
+
+	
 
 }
