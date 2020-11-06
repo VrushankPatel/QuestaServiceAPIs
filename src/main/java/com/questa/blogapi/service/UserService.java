@@ -113,6 +113,12 @@ public class UserService implements UserDetailsService {
 		Optional<User> userExist = userRepository.findByUserId(user.getUserId());
 		if (userExist.isPresent()) {
 			user.setPassword(StringUtils.hasText(user.getPassword())? passwordEncoder.encode(user.getPassword()):userExist.get().getPassword());
+			if(user.getEmail()!=null && !user.getEmail().isEmpty() && !userExist.get().getEmail().equals(user.getEmail())) {
+				Optional<User> emailExist = userRepository.findByEmail(user.getEmail());
+				if(emailExist.isPresent()) {
+					return new ResponseEntity<>(new QuestaResponse(ConstantUtil.EMAIL_ERROR_MESSAGE,ConstantUtil.EMAIL_ERROR_CODE,true,null), HttpStatus.OK);
+				}
+			}
 			userRepository.save(user);
 			log.info("User profile updated ["+user.toString()+"]");
 			String text = "<p>Hi "+user.getNickName() + "!</p><p>Your profile updated in the Questa.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
