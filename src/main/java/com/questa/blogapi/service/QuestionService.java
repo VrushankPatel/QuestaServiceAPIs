@@ -200,7 +200,10 @@ public class QuestionService {
 	
 	public List<Question> findAllBySubjectTopic(QuestionSearch questionSearch) {
 		log.info("findAllBySubjectTopic ::" + questionSearch.toString());
-		List<Question> questionList = fetchAnswersAndFeedbacks(questionRepository.findBySubjectAndTopicIgnoreCaseContainingAndQuestionDescIgnoreCaseContainingOrderByCreateDateDesc(questionSearch.getSubject(), questionSearch.getTopic(), questionSearch.getQuestionDesc()), questionSearch.getUserId());
+		
+		List<Question> questionList =(questionSearch.getSubject()!=null && !questionSearch.getSubject().isEmpty())?
+				fetchAnswersAndFeedbacks(questionRepository.findBySubjectAndTopicIgnoreCaseContainingAndQuestionDescIgnoreCaseContainingOrderByCreateDateDesc(questionSearch.getSubject(), questionSearch.getTopic(), questionSearch.getQuestionDesc()), questionSearch.getUserId()) : 
+					fetchAnswersAndFeedbacks(questionRepository.findByTopicIgnoreCaseContainingAndQuestionDescIgnoreCaseContainingOrderByCreateDateDesc(questionSearch.getTopic(), questionSearch.getQuestionDesc()), questionSearch.getUserId());
 		if(questionSearch.getSearchType()!=null && questionSearch.getSearchType().equalsIgnoreCase("ALL")) {
 			return questionList;
 		}else if(questionSearch.getSearchType()!=null && questionSearch.getSearchType().equalsIgnoreCase("WITHOUTANSWER")) {
