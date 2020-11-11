@@ -85,12 +85,12 @@ public class QuestionService {
 			});
 		});
 		if(!emailIds.isEmpty()) {
-			String text = "<p>Hi There!</p><p>Your question has been commented by "+userRepository.findByUserId(answer.getUserId()).orElse(new User()).getNickName()+" as below:</p>"
+			String text = "<p>Hi There!</p><p>A question you've followed was just answered by @"+userRepository.findByUserId(answer.getUserId()).orElse(new User()).getNickName()+":</p>"
 					+ "<p>Question: "+questionRepository.findByQuestionId(answer.getQuestionId()).orElse(new Question()).getQuestionDesc()+"</p>"
 					+ "<p>Answer: "+answer.getAnswerDesc()+"</p>"
-					+ "<p>Login <a href=\""+loginUrl+"\">Here</a> to reply on the comment.</p>"
-					+ "<p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
-			notificationService.sendBccNotification(emailIds.stream().toArray(String[]::new), "Your question has been answered in Questa", text);
+					+ "<p>Login <a href=\""+loginUrl+"\">Here</a> and click the Following tab to check it out!</p>"
+					+ "<p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
+			notificationService.sendBccNotification(emailIds.stream().toArray(String[]::new), "A Question You've Followed Has Been Answered in Questa", text);
 		}
 		
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.ANSWER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,fetchUserProgressLevel(answer.getUserId())), HttpStatus.OK);

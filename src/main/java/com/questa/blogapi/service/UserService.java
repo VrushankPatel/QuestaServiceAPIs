@@ -104,8 +104,8 @@ public class UserService implements UserDetailsService {
 		user.setRole(Role.USER); // Back-end api will only allow to create user with "USER" role
 		userRepository.save(user);
 		log.info("User created ["+user.toString()+"]");
-		String text = "<p>Hi "+user.getNickName() + "!</p><p>Welcome to the Questa.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
-		notificationService.sendNotification(user.getEmail(), "Account created in Questa", text);
+		String text = "<p>Hi "+user.getNickName() + "!</p><p>Hope you are doing well amid the pandemic.</p><p>Welcome to Questa. We're delighted to have you here!</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
+		notificationService.sendNotification(user.getEmail(), "New Account Created in Questa", text);
 		return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_CREATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 	}
 	
@@ -121,7 +121,7 @@ public class UserService implements UserDetailsService {
 			}
 			userRepository.save(user);
 			log.info("User profile updated ["+user.toString()+"]");
-			String text = "<p>Hi "+user.getNickName() + "!</p><p>Your profile updated in the Questa.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
+			String text = "<p>Hi "+user.getNickName() + "!</p><p>Your profile updated in the Questa.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
 			notificationService.sendNotification(user.getEmail(), "Profile updated in Questa", text);
 			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_UPDATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 		}
@@ -137,7 +137,7 @@ public class UserService implements UserDetailsService {
 			user.setPassword(passwordEncoder.encode(newPassword));
 			userRepository.save(user);
 			log.info("User found ["+user.toString()+"]");
-			String text = "<p>Hi "+user.getNickName() + "!</p><p>Please use default password [<strong><em>"+newPassword+"</em></strong>] to login in the Questa and please don&#39;t forget to change the password in Edit Profile option due security reason.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any queries/concerns, please reach out to us <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support</p>";
+			String text = "<p>Hi "+user.getNickName() + "!</p><p>Please use default password [<strong><em>"+newPassword+"</em></strong>] to login in the Questa and please don&#39;t forget to change the password in Edit Profile option due security reason.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
 			notificationService.sendNotification(user.getEmail(), "Password reset in Questa", text);
 			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PASSWARD_RESET_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 		}
