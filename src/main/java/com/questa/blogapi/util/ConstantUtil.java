@@ -6,25 +6,25 @@ public class ConstantUtil {
 	public static final Long USER_INCREASE_TIME_FROM_SECOND_LEVEL = 600L; // 10 mins each progress level
 	
 	//UserController end-points
-	public static final String LOGIN_ENDPOINT = "/login";
-	public static final String SIGNUP_ENDPOINT = "/signup";
-	public static final String UPDATE_USER_PROFILE_ENDPOINT = "/updateuserprofile";
-	public static final String RESET_PASSWORD_ENDPOINT = "/resetpassword";
-	public static final String GETUSER_ENDPOINT = "/getuser/{userId}";
-	public static final String GETFULLUSER_ENDPOINT = "/getfulluser/{userId}";
+	public static final String LOGIN_ENDPOINT = "/api/login";
+	public static final String SIGNUP_ENDPOINT = "/api/signup";
+	public static final String UPDATE_USER_PROFILE_ENDPOINT = "/api/updateuserprofile";
+	public static final String RESET_PASSWORD_ENDPOINT = "/api/resetpassword";
+	public static final String GETUSER_ENDPOINT = "/api/getuser/{userId}";
+	public static final String GETFULLUSER_ENDPOINT = "/api/getfulluser/{userId}";
 	
 	//QuestionController end-points
-	public static final String CREATE_QUESTION_ENDPOINT = "/createquestion";
-	public static final String CREATE_ANSWER_ENDPOINT = "/createanswer";
-	public static final String DELETE_ANSWER_ENDPOINT = "/deleteanswer";
-	public static final String CREATE_FOLLWER_ENDPOINT = "/createfollower";
-	public static final String CREATE_ANSWER_FEEDBACK_ENDPOINT = "/createfeedback";
-	public static final String CREATE_QUESTION_FEEDBACK_ENDPOINT = "/createquestionfeedback";
-	public static final String FIND_ALL_QUESTIONS_ENDPOINT = "/findallquestions/{userId}";
-	public static final String FIND_ALL_QUESTIONS_FOR_ADMIN_ENDPOINT = "/findallquestionsforadmin/{userId}";
-	public static final String FIND_ALL_BY_FOLLOWER_ENDPOINT = "/findallbyfollower/{userId}";
-	public static final String FIND_ALL_BY_ANSWER_ENDPOINT = "/findallbyanswer/{userId}";
-	public static final String FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT = "/findallbysubjecttopic";
+	public static final String CREATE_QUESTION_ENDPOINT = "/api/createquestion";
+	public static final String CREATE_ANSWER_ENDPOINT = "/api/createanswer";
+	public static final String DELETE_ANSWER_ENDPOINT = "/api/deleteanswer";
+	public static final String CREATE_FOLLWER_ENDPOINT = "/api/createfollower";
+	public static final String CREATE_ANSWER_FEEDBACK_ENDPOINT = "/api/createfeedback";
+	public static final String CREATE_QUESTION_FEEDBACK_ENDPOINT = "/api/createquestionfeedback";
+	public static final String FIND_ALL_QUESTIONS_ENDPOINT = "/api/findallquestions/{userId}";
+	public static final String FIND_ALL_QUESTIONS_FOR_ADMIN_ENDPOINT = "/api/findallquestionsforadmin/{userId}";
+	public static final String FIND_ALL_BY_FOLLOWER_ENDPOINT = "/api/findallbyfollower/{userId}";
+	public static final String FIND_ALL_BY_ANSWER_ENDPOINT = "/api/findallbyanswer/{userId}";
+	public static final String FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT = "/api/findallbysubjecttopic";
 	
 	public static final String[] AUTH_IGNORE_ENDPOINT = {LOGIN_ENDPOINT,SIGNUP_ENDPOINT,RESET_PASSWORD_ENDPOINT};
 

@@ -36,8 +36,6 @@ public class SecurityConfirguration extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 			.authorizeRequests().antMatchers(ConstantUtil.AUTH_IGNORE_ENDPOINT).permitAll()
-			.antMatchers("/signup").permitAll()
-			.antMatchers("/resetuserpassword").permitAll()
 			.anyRequest().authenticated()
 			.and().sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
