@@ -121,8 +121,8 @@ public class UserService implements UserDetailsService {
 			}
 			userRepository.save(user);
 			log.info("User profile updated ["+user.toString()+"]");
-			String text = "<p>Hi "+user.getNickName() + "!</p><p>Your profile updated in the Questa.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
-			notificationService.sendNotification(user.getEmail(), "Profile updated in Questa", text);
+			String text = "<p>Hi "+user.getNickName() + "!</p><p>Your profile was recently updated in Questa.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
+			notificationService.sendNotification(user.getEmail(), "Profile Recently Updated in Questa", text);
 			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PROFILE_UPDATED_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 		}
 		log.info("User profile not found ["+user.toString()+"]");
