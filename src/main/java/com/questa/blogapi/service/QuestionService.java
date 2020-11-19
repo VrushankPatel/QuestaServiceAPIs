@@ -294,4 +294,15 @@ public class QuestionService {
 		}
 		return progressLevel;
 	}
+
+	public List<User> findTopTenUsers() {
+		List<User> topUsersList = new ArrayList<>();
+		answerRepository.findTopTenUsers().stream().limit(10).forEach(obj -> {
+			userRepository.findByUserId((Integer) obj[0]).ifPresent(user -> {
+				user.setUserProgressLevel(fetchUserProgressLevel(user.getUserId()));
+				topUsersList.add(user);
+			});
+		});
+		return topUsersList;
+	}
 }

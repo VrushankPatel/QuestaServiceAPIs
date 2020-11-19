@@ -65,6 +65,10 @@ public class User implements Serializable{
 
 	@JsonInclude()
 	@Transient
+	private UserProgressLevel userProgressLevel;
+	
+	@JsonInclude()
+	@Transient
 	private List<Question> questionList;
 	
 	public String getFirstName() {
@@ -161,6 +165,15 @@ public class User implements Serializable{
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+	
+
+	public UserProgressLevel getUserProgressLevel() {
+		return userProgressLevel;
+	}
+
+	public void setUserProgressLevel(UserProgressLevel userProgressLevel) {
+		this.userProgressLevel = userProgressLevel;
 	}
 
 	@Override

@@ -18,4 +18,7 @@ public interface AnswerRepository  extends CrudRepository<Answer, Integer>{
 	
 	@Query(value = "SELECT sum(a.timeTaken) FROM Answer a where a.userId = ?1")
 	Long sumTimeTakenByQuestionId(Integer userId);
+	
+	@Query(value = "select userId, sum(timeTaken) as timeTaken from Answer group by userId order by timeTaken desc")
+	List<Object[]> findTopTenUsers();
 }

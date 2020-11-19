@@ -25,6 +25,7 @@ public class ConstantUtil {
 	public static final String FIND_ALL_BY_FOLLOWER_ENDPOINT = "/api/findallbyfollower/{userId}";
 	public static final String FIND_ALL_BY_ANSWER_ENDPOINT = "/api/findallbyanswer/{userId}";
 	public static final String FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT = "/api/findallbysubjecttopic";
+	public static final String FIND_TOP_TEN_USERS_ENDPOINT = "/api/findtoptenusers";
 	
 	public static final String[] AUTH_IGNORE_ENDPOINT = {LOGIN_ENDPOINT,SIGNUP_ENDPOINT,RESET_PASSWORD_ENDPOINT};
 

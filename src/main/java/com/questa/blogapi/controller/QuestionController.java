@@ -20,6 +20,7 @@ import com.questa.blogapi.model.Follower;
 import com.questa.blogapi.model.Question;
 import com.questa.blogapi.model.QuestionFeedback;
 import com.questa.blogapi.model.QuestionSearch;
+import com.questa.blogapi.model.User;
 import com.questa.blogapi.service.QuestionService;
 import com.questa.blogapi.util.ConstantUtil;
 
@@ -98,5 +99,11 @@ public class QuestionController {
 	public List<Question> findAllBySubjectTopic(@RequestBody QuestionSearch questionSearch) throws QuestaException {
 		log.info("Calling "+ ConstantUtil.FIND_ALL_BY_SUBJECT_TOPIC_ENDPOINT +" endpoint");
 		return questionService.findAllBySubjectTopic(questionSearch);
+	}
+	
+	@RequestMapping(value = ConstantUtil.FIND_TOP_TEN_USERS_ENDPOINT, method = RequestMethod.POST, produces = ConstantUtil.PRODUCE_APP_JSON)
+	public List<User> findTopTenUsers() throws QuestaException {
+		log.info("Calling "+ ConstantUtil.FIND_TOP_TEN_USERS_ENDPOINT +" endpoint");
+		return questionService.findTopTenUsers();
 	}
 }
