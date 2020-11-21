@@ -31,7 +31,7 @@ public class Answer {
 	@Column(name = "USER_ID", nullable = false)
 	private Integer userId;
 	
-	@Column(name = "ANSWER_DESC", nullable = false, length = 1000)
+	@Column(name = "ANSWER_DESC", nullable = false, length = 2500)
 	private String answerDesc;
 	
 	@Column(name="TIME_TAKEN", nullable = false)

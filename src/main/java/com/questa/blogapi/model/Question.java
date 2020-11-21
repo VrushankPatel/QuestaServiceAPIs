@@ -38,7 +38,7 @@ public class Question implements Serializable {
 	@Column(name = "TOPIC", nullable = false)
 	private String topic;
 
-	@Column(name = "QUESTION_DESC", nullable = false, length = 1000)
+	@Column(name = "QUESTION_DESC", nullable = false, length = 2500)
 	private String questionDesc;
 
 	@Column(name = "CREATE_DATE", nullable = false)
