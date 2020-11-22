@@ -75,7 +75,7 @@ public class QuestionService {
 	
 	public ResponseEntity<Object> createAnswer(Answer answer) throws QuestaException {
 		log.info("Saving answer details :: " + answer.toString());
-		answerRepository.findByQuestionIdAndUserId(answer.getQuestionId(), answer.getUserId()).ifPresent(ans -> answer.setAnswerId(ans.getAnswerId()));
+		//answerRepository.findByQuestionIdAndUserId(answer.getQuestionId(), answer.getUserId()).ifPresent(ans -> answer.setAnswerId(ans.getAnswerId()));
 		answerRepository.save(answer);
 		List<String> emailIds = new ArrayList<>();
 		log.info("Sending notification mail to the questioned user...");

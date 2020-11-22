@@ -12,7 +12,7 @@ public interface AnswerRepository  extends CrudRepository<Answer, Integer>{
 
 	List<Answer> findByQuestionIdOrderByCreateDateDesc(Integer questionId);
 	List<Answer> findByUserIdOrderByCreateDateDesc(Integer userId);
-	Optional<Answer> findByQuestionIdAndUserId(Integer questionId, Integer userId);
+	//Optional<Answer> findByQuestionIdAndUserId(Integer questionId, Integer userId);
 	Optional<Answer> findByAnswerId(Integer answerId);
 	Integer countByQuestionId(Integer questionId);
 	
