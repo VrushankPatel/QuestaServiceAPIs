@@ -137,8 +137,8 @@ public class UserService implements UserDetailsService {
 			user.setPassword(passwordEncoder.encode(newPassword));
 			userRepository.save(user);
 			log.info("User found ["+user.toString()+"]");
-			String text = "<p>Hi "+user.getNickName() + "!</p><p>Please use default password [<strong><em>"+newPassword+"</em></strong>] to login in the Questa and please don&#39;t forget to change the password in Edit Profile option due security reason.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
-			notificationService.sendNotification(user.getEmail(), "Password reset in Questa", text);
+			String text = "<p>Hi "+user.getNickName() + "!</p><p>Don't worry if you forgot your password. It happens to all of us :)</p><p>Use password [<strong><em>"+newPassword+"</em></strong>] to login in the Questa and change the password in the Edit Profile tab for security reasons.</p><p>Login <a href=\""+loginUrl+"\">Here</a>.</p><p>For any questions, feedback, or concerns, shoot us an email at: <a href=\"mailto:"+fromEmail+",\">"+fromEmail+",</a></p><p>Thanks,</p><p>Questa Support Team</p>";
+			notificationService.sendNotification(user.getEmail(), "Quest Account Password Reset", text);
 			return new ResponseEntity<>(new QuestaResponse(ConstantUtil.USER_PASSWARD_RESET_MESSAGE,ConstantUtil.SUCCESS_CODE,true,null), HttpStatus.OK);
 		}
 		log.info("User not found ["+email+"]");
